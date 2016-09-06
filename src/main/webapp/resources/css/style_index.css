@@ -1,0 +1,77 @@
+#body_style {
+	overflow: hidden;
+	width: 100%;
+}
+
+#menu_esquerdo {
+	font-size: 0.8em;
+	overflow: hidden;
+	margin-top: 10%;
+}
+
+#corpoLogin {
+	margin-top: 250px;
+	margin-left: 500px;
+	margin-right: 320px;
+}
+
+#header_usuario {
+	color: #2486a6;
+	float: right;
+}
+
+#header_logomarca {
+	float: left;
+	margin-top: 3%;
+	margin-left: 40%;
+}
+
+#header_menu {
+	float: right;
+}
+
+#body_login {
+	
+}
+
+#login {
+	margin-left: 250px;
+}
+
+#panel_botaoes {
+	float: left !important;
+	margin-left: 2% !important;
+}
+
+#linha_topo {
+	height: 1px;
+	background: #c0c0c0;
+	width: 41.5%;
+	float: right;
+}
+
+.textos_dialogos_help {
+	font-size: 16px !important;
+	color: #1b8ca5 !important;
+}
+
+.titulos_dialogos_help {
+	font-size: 17px !important;
+	color: #1b8ca5 !important;
+	font-style: italic !important;
+}
+
+.podemos_ajudar {
+	font-size: 12px !important;
+	margin-left: 2% !important;
+	color: #ff8000 !important;
+}
+
+.panel_botoes {
+	width: 15% !important;
+	float: left !important;
+}
+
+.command_button_panel {
+	float: left;
+}

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/template/template_principal.xhtml">
+	<ui:define name="conteudo">
+		<p:fieldset legend="Include/ Permissões Usuário">
+		<p:panelGrid columns="2" >
+				<p:column>
+					<p:panelGrid  columns="2" style="width:100%;">
+						<p:column>
+								<p:outputLabel value="Nome"/>
+						</p:column>
+						<p:column style="width:60%;">
+								<p:inputText   value="#{permissoesUsuarioMBean.permissoesUsuario.nome}" />									
+						</p:column>
+						<p:column>
+								<p:outputLabel value="Descrição"/>
+						</p:column>
+						<p:column style="width:60%;">
+								<p:inputText   value="#{permissoesUsuarioMBean.permissoesUsuario.descricao}" />									
+						</p:column>
+					</p:panelGrid>
+				</p:column>	
+				</p:panelGrid>
+				<p:panelGrid columns="1" style="width:10%; margin-left:2%;">
+						<p:column>
+							<p:commandButton rendered="#{permissoesUsuarioMBean.fluxoDePagina == 1}" update="form" icon="ui-icon-plus" value="SALVAR" action="#{permissoesUsuarioMBean.salvar()}"/>
+						</p:column>
+						<p:column>
+							<p:commandButton rendered="#{permissoesUsuarioMBean.fluxoDePagina == 2}" update="form" icon="ui-icon-plus" value="ATUALIZAR" action="#{permissoesUsuarioMBean.alterar()}"/>
+						</p:column>
+				</p:panelGrid>
+				<p:fieldset  id="fieldPerfil" legend="Existentes" style="width:50%;" >
+				<p:column >
+						<p:dataTable rendered="#{not empty permissoesUsuarioMBean.listaPermissoesUsuarios}"
+				 			id="tabelaPerfil" var="perfil" style="width:100%;" value="#{permissoesUsuarioMBean.listaPermissoesUsuarios}">
+							<p:column headerText="Id" style="width:10px;">
+								<p:outputLabel value="#{perfil.id}" />
+							</p:column>
+							<p:column headerText="Nome" style="width:20%;">
+								<p:outputLabel value="#{perfil.nome}"/>
+							</p:column>
+							<p:column headerText="Descrição" style="width:20%;">
+								<p:outputLabel value="#{perfil.descricao}"/>
+							</p:column>
+							
+							<p:column style="width:15%;">
+							<p:commandButton icon="ui-icon-pencil"  action="#{permissoesUsuarioMBean.carregarEdit()}" update="form"> 
+									<f:setPropertyActionListener value="#{perfil}" target="#{permissoesUsuarioMBean.permissoesUsuario}"/>
+								</p:commandButton>
+							<p:commandButton icon="ui-icon-trash"  action="#{permissoesUsuarioMBean.excluir()}"
+								 update="form"> 
+									<f:setPropertyActionListener value="#{perfil}" target="#{permissoesUsuarioMBean.permissoesUsuario}"/>
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+				</p:column>
+			</p:fieldset>
+				
+				</p:fieldset>
+				</ui:define>
+				</ui:composition>

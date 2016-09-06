@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/template/template_externos.xhtml">
+	<ui:define name="conteudo">
+
+			<p:fieldset legend="Controle Financeiro" style="width:50%;margin-top:10%; margin-left:25%;">
+			
+	<p:panelGrid columns="2" >
+		<p:column >
+			<p:panelGrid columns="2">
+				<p:column >
+						<p:outputLabel value="Login:" />
+				</p:column>
+				<p:column>
+						<p:inputText value="#{loginMBean.usuario.login}" />
+				</p:column>
+			
+				<p:column>
+						<p:outputLabel value="Senha:" />
+				</p:column>
+				<p:column>
+						<p:inputText value="#{loginMBean.usuario.senha}" />
+				</p:column>
+			</p:panelGrid>
+		</p:column>
+		
+		<p:column>
+			<p:panelGrid columns="2" style="float:right;">
+				<p:column style="width:30px;">
+					<p:commandButton  icon="ui-icon-person" update="message, form" action="#{loginMBean.logar()}" value="Logar"  title="Entrar"/>
+				</p:column>
+				<p:column style="width:30%;">	
+					<p:commandButton icon="ui-icon-cart" value="Comprar" action="#{usuarioMBean.cadastrar()}"  title="Assinar"/>
+				</p:column>
+			</p:panelGrid>
+		</p:column>
+</p:panelGrid>
+</p:fieldset>
+	</ui:define>
+</ui:composition>

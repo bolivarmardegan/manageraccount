@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/template/template_principal.xhtml">
+	<ui:define name="conteudo">
+		<p:fieldset legend="Include/ Tipos/ Finança">
+		<p:panelGrid columns="2" >
+				<p:column>
+					<p:panelGrid  columns="2">
+						<p:column>
+								<p:outputLabel value="Nome"/>
+						</p:column>
+						<p:column style="width:100%;">
+								<p:inputText   value="#{tipoFinancaMBean.tipoFinanca.nome}" />
+						</p:column>
+					</p:panelGrid>
+				</p:column>	
+				</p:panelGrid>
+			
+			<p:fieldset legend="Tipos/ Finança">
+				<p:dataTable style="width:100%;" rows="10" paginator="true" paginatorPosition="bottom"  
+					value="#{tipoFinancaMBean.tipoFinancaList}" var="tipos">
+					<p:column headerText="Nome" style="width:50%;">
+						<p:outputLabel value="#{tipos.nome}"/>
+					</p:column>
+					<p:column style="width:12%;" >
+						<p:commandButton style="margin-left:10px;" icon="ui-icon-pencil" action="#{tipoFinancaMBean.carregarTipos()}" update="form">
+							<f:setPropertyActionListener value="#{tipos}" target="#{tipoFinancaMBean.tipoFinanca}"/>
+						</p:commandButton>
+						<p:commandButton  icon="ui-icon-trash" action="#{tipoFinancaMBean.excluir()}" update="form">
+							<f:setPropertyActionListener value="#{tipos}" target="#{tipoFinancaMBean.tipoFinanca}"/>
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</p:fieldset>
+			
+			
+			</p:fieldset>
+			<p:panelGrid columns="1" style="width:10%; margin-left:2%;" >
+						<p:column>
+							<p:commandButton rendered="#{tipoFinancaMBean.fluxoDePagina == 1}" value="SALVAR" icon="ui-icon-plus" action="#{tipoFinancaMBean.salvar()}" 
+							update="form"/>
+						</p:column>
+						<p:column>
+							<p:commandButton rendered="#{tipoFinancaMBean.fluxoDePagina == 2}" value="ATUALIZAR" icon="ui-icon-pencil" action="#{tipoFinancaMBean.editar()}" 
+							update="form"/>
+						</p:column>
+		</p:panelGrid>
+	</ui:define>
+</ui:composition>

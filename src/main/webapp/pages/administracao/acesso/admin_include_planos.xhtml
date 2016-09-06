@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/template/template_principal.xhtml">
+	<ui:define name="conteudo">
+		<p:fieldset legend="Include/ Planos">
+		<p:panelGrid columns="2" >
+				<p:column>
+					<p:panelGrid  columns="2" style="width:100%;">
+						<p:column>
+								<p:outputLabel value="Nome"/>
+						</p:column>
+						<p:column style="width:60%;">
+								<p:inputText   value="#{planoMBean.plano.nome}" />									
+						</p:column>
+						<p:column>
+								<p:outputLabel value="Status"/>
+						</p:column>
+						<p:column>
+							<h:panelGrid>
+								<p:selectOneRadio id="status" value="#{planoMBean.plano.status}">
+									<f:selectItem id="ativo" itemLabel="Ativo" itemValue="#{true}"/>
+									<f:selectItem id="inativo" itemLabel="Inativo" itemValue="#{false}"/>
+								</p:selectOneRadio>
+							</h:panelGrid>
+							</p:column>
+							<p:column>
+								<p:outputLabel value="Valor R$"/>
+							</p:column>
+							<p:column>
+								<p:inputText  value="#{planoMBean.plano.valorPlano}"/>
+							</p:column>
+							 <p:column>
+			                		<p:outputLabel value="Perfil"/>
+			                	</p:column>
+				                <p:column>
+				                    <p:selectOneMenu value="#{planoMBean.plano.perfil.id}" >
+										<f:selectItem itemLabel="** Perfil" />
+										<f:selectItems value="#{planoMBean.perfilList}"
+											var="perfil" itemLabel="#{perfil.nome} - #{perfil.descricao}" itemValue="#{perfil.id}"/>
+									</p:selectOneMenu>
+				                </p:column>
+						
+					</p:panelGrid>
+				</p:column>	
+					
+				<p:column  >	
+					<p:panelGrid  columns="1" >
+						<p:column >
+								<p:fieldset legend="Vincular Menus" >
+									<p:panelGrid columns="3" >
+										<p:column>
+											<p:selectOneMenu value="#{planoMBean.menu.id}" >
+												<f:selectItems value="#{planoMBean.menuListInit}" itemDisabled="false"
+												var="menu" itemLabel="#{menu.nome}" itemValue="#{menu.id}"/>
+											</p:selectOneMenu>
+										</p:column>
+										<p:column>
+											<p:commandButton  icon="ui-icon-plus" value="INCLUIR" action="#{planoMBean.vincularMenu}" update="form"/>
+										</p:column>
+										<p:column>
+											<p:commandButton   value="CLEAN"  icon="ui-icon-refresh" action="#{planoMBean.clean()}" 
+											update="form"/>
+										</p:column>
+									</p:panelGrid>
+								</p:fieldset>
+							</p:column>
+						</p:panelGrid>
+					</p:column>
+				</p:panelGrid>
+			
+			<p:fieldset legend="Menus" rendered="#{not empty planoMBean.menuListSelected}">
+				<p:dataTable style="width:100%;" value="#{planoMBean.menuListSelected}" var="menusSelected">
+					<p:column headerText="Nome">
+						<p:outputLabel value="#{menusSelected.nome}"/>
+					</p:column>
+					<p:column headerText="Status">
+						<p:outputLabel value="#{menusSelected.status}"/>
+					</p:column>
+					<p:column style="width:8%;">
+								<p:commandButton icon="ui-icon-trash" action="#{planoMBean.desvincularMenu()}" update="form">
+									<f:setPropertyActionListener value="#{menusSelected}" target="#{planoMBean.menu}"/>
+								</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</p:fieldset>
+			<p:fieldset legend="Planos" rendered="#{empty planoMBean.menuListSelected}">
+				<p:dataTable style="width:100%;" value="#{planoMBean.planosList}" var="plano">
+					<p:column headerText="Nome">
+						<p:outputLabel value="#{plano.nome}"/>
+					</p:column>
+					<p:column headerText="Status" style="width:10%;">
+						<h:graphicImage style="width:10%;margin-left:47%;" library="imagens" name="circulo_verde.png" rendered="#{plano.status == ('true')}"/> 
+						<h:graphicImage style="width:10%;margin-left:47%;" library="imagens" name="circulo_vermelho.png" rendered="#{plano.status == ('false')}"/> 
+					</p:column>
+					<p:column style="width:10%;">
+								<p:commandButton icon="ui-icon-pencil" action="#{planoMBean.carregarPlanoEdit()}" update="form">
+									<f:setPropertyActionListener value="#{plano}" target="#{planoMBean.plano}"/>
+								</p:commandButton>
+								<p:commandButton  icon="ui-icon-trash" action="#{planoMBean.excluir()}" update="form">
+									<f:setPropertyActionListener value="#{plano}" target="#{planoMBean.plano}"/>
+								</p:commandButton>
+								
+					</p:column>
+				</p:dataTable>
+			</p:fieldset>
+			
+			
+			</p:fieldset>
+			<h:panelGrid columns="1" style="width:10%; margin-left:2%;">
+						<p:column>
+							<p:commandButton rendered="#{planoMBean.fluxoDePagina == 1}" update="form" icon="ui-icon-plus" value="SALVAR" action="#{planoMBean.salvar()}"/>
+						</p:column>
+						<p:column>
+							<p:commandButton rendered="#{planoMBean.fluxoDePagina == 2}" update="form" icon="ui-icon-plus" value="ATUALIZAR" action="#{planoMBean.alterar()}"/>
+						</p:column>
+						
+						
+		</h:panelGrid>
+	</ui:define>
+</ui:composition>

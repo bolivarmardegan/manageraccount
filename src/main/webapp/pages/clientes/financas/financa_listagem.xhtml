@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<body>
+	<h:form>
+	<p:fieldset style="width:150%;">
+		<p:panelGrid columns="3"  >
+			<p:column>
+				<p:outputLabel value="Categoria da Finança" />
+			</p:column>
+			<p:column>
+				<p:selectOneMenu value="#{financasMBean.categoria.id}">
+						<f:selectItem itemLabel="Geral" />
+						<f:selectItems 	value="#{financasMBean.categoriaList}" 	var="cate" itemLabel="#{cate.nome}"
+									itemValue="#{cate.id}" />
+						<p:ajax listener="#{financasMBean.carregarFinancasPorCate()}" event="change" 
+								update="pList,tabCate"/>
+				</p:selectOneMenu>
+			</p:column>
+		</p:panelGrid>
+		<p:fieldset  legend="Finanças do Usuário #{usuarioSessionControler.usuarioLogado.nome}" >
+			<p:panelGrid columns="1" id="pList" >
+				<p:column>
+					<p:dataTable  editable="true" value="#{financasMBean.financas}" var="financa" rows="5" style="width:100%;" paginator="true" paginatorPosition="bottom">
+						
+						<p:ajax event="rowEdit" listener="#{financasMBean.editarUnidade(financa)}" update="form:messages" />
+	       				<p:ajax event="rowEditCancel" listener="#{financasMBean.onRowCancel(financa)}" update="form:messages" />
+								<p:column headerText="Nome" style="width:25%;">
+									<p:cellEditor>
+										<f:facet name="output">
+											<p:outputLabel value="#{financa.nome}"/>
+										</f:facet>
+					               		<f:facet name="input">
+					               			<p:inputText  value="#{financa.nome}" style="width:100%"/>
+					               		</f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column headerText="Valor" style="width:10%;">
+									<p:cellEditor>
+										<f:facet name="output">
+											<p:outputLabel value="#{financa.valor}"/>
+										</f:facet>
+										<f:facet name="input">
+											<p:inputNumber symbol="R$" maxValue="999999999999"  value="#{financa.valor}"/>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column headerText="Vencimento" style="width:10%;">
+									<p:cellEditor>
+										<f:facet name="output">
+											<p:outputLabel 	value="#{financa.dataVencimento}" 	 disabled="true">
+												<f:converter converterId="dateConverter"/>
+											</p:outputLabel>
+										</f:facet>
+										<f:facet name="input">
+											<p:inputMask mask="99/99/9999" required="true" requiredMessage="Data de vencimento obrigatória"
+												value="#{financa.dataVencimento}"
+												converter="dateConverter">
+											</p:inputMask>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column headerText="Tipo" style="width:10%;">
+									<p:cellEditor>
+										<f:facet name="output">
+											<p:outputLabel value="#{financa.tipoFinanca}" />
+										</f:facet>
+										<f:facet name="input">
+												<p:selectOneMenu value="#{financasMBean.financa.tipoFinanca}">
+													<f:selectItem itemLabel="Tipo da Finança" />
+													<f:selectItems 	value="#{financasMBean.tipoFinancaList}"
+														var="tipo" itemLabel="#{tipo.nome}" itemValue="#{tipo.nome}" />
+										</p:selectOneMenu>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column headerText="Status" style="width:8%;">
+									<p:outputLabel style="color:#ff0000;"  value="Vencida" rendered="#{financa.vencida == ('TRUE')}"/>
+									<p:outputLabel style="color:#2E8B57;" value="No Prazo" rendered="#{financa.vencida == ('FALSE')}"/>
+								</p:column>
+								<p:column headerText="Pgto." style="width:12%;">
+									<p:outputLabel style="color:#ff0000;"  value="pgto. Futuro" rendered="#{financa.paga == ('FALSE')}"/>
+									<p:outputLabel style="color:#2E8B57;" value="Paga" rendered="#{financa.paga == ('TRUE')}"/>
+								</p:column>
+								<p:column style="width:15px">
+							           <p:rowEditor style="widt:20%;"/>
+							       </p:column>
+					</p:dataTable>
+				</p:column>
+					<p:panelGrid style="width:33%;margin-left:35%;" columns="2" id="tabCate" >
+						 <f:facet name="header">
+					        <p:outputLabel rendered="#{financasMBean.categoria.nome == ('Geral')}" value="Saldo Geral de Finanças"/>
+					        <p:outputLabel rendered="#{financasMBean.categoria.nome != ('Geral')}" value="Saldo das Finanças #{financasMBean.categoria.nome}"/>
+					    </f:facet>
+						<p:column>
+							<p:outputLabel style="font-size:12px;" value="Total de Créditos"/>
+						</p:column>
+						<p:column>
+							<p:outputLabel style="color:#006400; font-size:14px;"  value="#{financasMBean.creditos}"/>
+						</p:column>
+						<p:column>
+							<p:outputLabel style="font-size:12px;"  value="Total de Débitos"/>
+						</p:column>
+						<p:column>
+							<p:outputLabel style="color:#ff0000; font-size:14px;" value="#{financasMBean.debitos}"/>
+						</p:column>
+						<p:column>
+							<p:outputLabel style="font-size:12px;" value="Saldo Total"/>
+						</p:column>
+						<p:column>
+							<p:outputLabel rendered="#{financasMBean.saldo gt 0}" style="color:#2E8B57;font-size:15px;"  value="#{financasMBean.saldo}"/>
+							<p:outputLabel rendered="#{financasMBean.saldo lt 0}" style="color:#ff0000;font-size:15px;"  value="#{financasMBean.saldo}"/>
+						</p:column>
+					</p:panelGrid>
+				</p:panelGrid>
+		</p:fieldset>
+		
+	</p:fieldset>
+	</h:form>
+	
+</body>
+</html>
+

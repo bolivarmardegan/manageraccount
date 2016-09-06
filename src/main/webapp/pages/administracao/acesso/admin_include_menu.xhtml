@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/template/template_principal.xhtml">
+	<ui:define name="conteudo">
+		<p:fieldset legend="Include/ Menu">
+		<p:panelGrid columns="2" >
+				<p:column>
+					<p:panelGrid  columns="2">
+						<p:column>
+								<p:outputLabel value="Nome/ Menu"/>
+						</p:column>
+						<p:column style="width:100%;">
+								<p:inputText   value="#{menuMBean.menu.nome}" >
+									<p:ajax update="form" event="change" process="@this"/>
+								</p:inputText>
+						</p:column>
+						<p:column>
+								<p:outputLabel value="Tipo/ Menu"/>
+						</p:column>
+						<p:column>
+							<p:selectOneMenu value="#{menuMBean.tipoMenu.id}">
+								<f:selectItems value="#{menuMBean.tipoMenuList}" var="tipo"
+								itemLabel="#{tipo.nome}" itemValue="#{tipo.id}"/>
+							</p:selectOneMenu>
+						</p:column>
+						
+					</p:panelGrid>
+				</p:column>	
+					
+				<p:column  >	
+					<p:panelGrid  columns="1"   rendered="#{not empty menuMBean.menu.nome}">
+						<p:column >
+								<p:fieldset legend="Incluir/ Submenus" >
+									<p:panelGrid columns="2" >
+										<p:column>
+											<p:outputLabel value="Nome SubMenu"/>
+										</p:column>
+										<p:column >
+											<p:inputText value="#{menuMBean.subMenus.nome}"/>
+										</p:column>
+										<p:column>
+											<p:outputLabel value="URL SubMenu"/>
+										</p:column>
+										<p:column >
+											<p:inputTextarea value="#{menuMBean.subMenus.url}"/>
+										</p:column>
+										<p:column>
+										<p:panelGrid columns="2" style="width:10%; ">
+											<p:commandButton value="INCLUIR" icon="ui-icon-plus" action="#{menuMBean.vincularSubMenus()}" update="form"/>
+											<p:commandButton   value="CLEAN"  icon="ui-icon-refresh" action="#{menuMBean.clear()}" 
+											update="form"/>
+										</p:panelGrid>
+										</p:column>
+									</p:panelGrid>
+								</p:fieldset>
+							</p:column>
+						</p:panelGrid>
+					</p:column>
+				</p:panelGrid>
+			
+			<p:fieldset legend="Menus">
+				<p:dataTable style="width:100%;" rows="10" paginator="true" paginatorPosition="bottom"  value="#{menuMBean.menuList}" var="menu">
+					<p:column headerText="Nome" style="width:50%;">
+						<p:outputLabel value="#{menu.nome}"/>
+					</p:column>
+					<p:column rendered="#{empty  menuMBean.subMenusList}" headerText="Vinculado" style="width:5%;">
+						<h:graphicImage title="Este Menu não pode ser excluído. Está vinculado a um plano." style="width:15%;margin-left:40%;;" library="imagens" name="circulo_verde.png" rendered="#{menu.status == ('true')}"/> 
+						<h:graphicImage title="Este Menu pode ser excluído, não está vinculado a nenhum Plano." style="width:15%;margin-left:40%;" library="imagens" name="circulo_vermelho.png" rendered="#{menu.status == ('false')}"/> 
+					</p:column>
+					<p:column style="width:70%;" rendered="#{not empty  menuMBean.subMenusList}">
+						<p:dataTable id="tableInterna" style="width:100%;" value="#{menuMBean.subMenusList}" var="subMenuAgragado">
+							<p:column headerText="SubMenus" >
+								<p:outputLabel value="#{subMenuAgragado.nome}"/>
+							</p:column>
+							<p:column style="width:15%;">
+								<p:commandButton icon="ui-icon-pencil" action="#{menuMBean.carregarSubMenuEdit()}" update="form">
+									<f:setPropertyActionListener value="#{subMenuAgragado}" target="#{menuMBean.subMenus}"/>
+								</p:commandButton>
+								<p:commandButton icon="ui-icon-trash" action = "#{menuMBean.limparSubMenus()}" update="form">
+									<f:setPropertyActionListener value="#{subMenuAgragado}" target="#{menuMBean.subMenus}"/>
+								</p:commandButton>
+								</p:column>
+						</p:dataTable>
+					</p:column>
+					<p:column style="width:7%;" rendered="#{empty menuMBean.subMenusList}">
+						<p:commandButton style="margin-left:10px;" icon="ui-icon-pencil" action="#{menuMBean.carregarMenuEdit()}" update="form">
+							<f:setPropertyActionListener value="#{menu}" target="#{menuMBean.menu}"/>
+						</p:commandButton>
+						<p:commandButton  rendered="#{menu.status == ('false')}" icon="ui-icon-trash" action="#{menuMBean.excluir()}" update="form">
+							<f:setPropertyActionListener value="#{menu}" target="#{menuMBean.menu}"/>
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</p:fieldset>
+			
+			
+			</p:fieldset>
+			<p:panelGrid columns="1" style="width:10%; margin-left:2%;"  rendered="#{not empty  menuMBean.subMenusList}">
+						<p:column>
+							<p:commandButton rendered="#{menuMBean.fluxoDePagina == 1}" value="SALVAR" icon="ui-icon-plus" action="#{menuMBean.salvar()}" 
+							update="form"/>
+						</p:column>
+						<p:column>
+							<p:commandButton rendered="#{menuMBean.fluxoDePagina == 2}" value="ATUALIZAR" icon="ui-icon-pencil" action="#{menuMBean.editar()}" 
+							update="form"/>
+						</p:column>
+						
+		</p:panelGrid>
+	</ui:define>
+</ui:composition>

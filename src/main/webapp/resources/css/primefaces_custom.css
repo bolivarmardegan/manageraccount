@@ -1,0 +1,426 @@
+.ui-layout-unit {
+	border: 0px;
+	background-color: #FFFFFF;
+	padding: 0;
+}
+
+.ui-layout-pane-west {
+	background-color: #ffffff;
+	padding: 0;
+	border: 0px;
+	
+}
+
+.ui-panelmenu .ui-panelmenu-header {
+	background-color: #bedcce;
+	background: #FFFFFF;
+	cursor:pointer;
+	padding: 0;
+	border: 0px;
+	border-top: solid 2px #29afdc;
+	width: 70%;
+}
+
+
+
+.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited{
+	color:#ffffff !important;
+
+	
+}
+
+.ui-menuitem-text {
+	color: #32b0cb;
+	
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	font-size: 11px;
+}
+
+.ui-panelmenu-content, .ui-widget-content, .ui-helper-hidden {
+	border-color: #FFFFFF;
+}
+
+.ui-menuitem, .ui-widget, .ui-corner-all {
+	width: 60%;
+}
+
+.ui-menuitem-link {
+	width: 60%;
+}
+
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover,
+	.ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus
+	{
+	
+	
+	
+}
+
+.ui-panelmenu-panel {
+	width: 300px;
+}
+
+.ui-layout-unit.ui-widget.ui-widget-content.ui-corner-all.ui-layout-south.ui-layout-pane.ui-layout-pane-south
+.ui-layout-unit-content.ui-widget-content {
+	color: #2486a6;
+	
+	margin: 1%;
+	margin-left: 46%;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	font-size: 0.9em;
+}
+
+.ui-menu, .ui-menubar, .ui-widget, .ui-widget-content, .ui-corner-all,
+	.ui-helper-clearfix {
+		
+}
+
+.ui-layout-north {
+	z-index: 20 !important;
+	overflow: visible !important;
+}
+
+.ui-layout-north .ui-layout-unit-content {
+	overflow: visible !important;
+}
+
+.ui-inputfield.ui-inputtext.ui-widget.ui-state-default.ui-corner-all {
+	width: 100%;
+	background: #ffffff;
+	
+}
+
+.ui-layout-resizer.ui-layout-resizer-south.ui-layout-resizer-open.ui-layout-resizer-south-open
+	{
+}
+
+
+/*CUSTOMIZA��O DE FIELDSETS*/
+.ui-fieldset.ui-widget.ui-widget-content.ui-corner-all.ui-hidden-container{
+	border-color:  #d5e9fd;
+	width: 94%;
+	margin-left: 1%;
+	
+}
+
+.ui-fieldset{
+	padding: 0 !important;
+}
+
+.ui-fieldset-legend.ui-corner-all.ui-state-default{
+	font-family: sans-serif;
+	font-size: 15px;
+	border-color: #ffffff;
+	width: 20%;
+	background:#ffffff;
+	color: #48788e!important;
+}
+
+.ui-fieldset-content{
+	margin: 0.5% !important;
+	
+}
+
+/*CUSTOMIZA��O DE PANELGRID*/
+
+.ui-panelgrid-cell{
+	font-size: 12px;
+	color: #266379;
+	
+}
+.ui-panelgrid.ui-widget{
+	width: 100%;
+}
+
+.ui-inputfield{
+	font-size: 13px !important;
+	color: #2061d9 !important;
+	width: 100%;
+}
+
+.ui-password{
+	font-size: 13px !important;
+	color: #2061d9 !important;
+	padding: 1px !important;
+	width: 100% !important;
+	
+}
+
+/*BOT�ES*/
+.ui-button-text{
+	font-size: 10px;
+}
+
+.ui-button{
+	background: #1f9dc7;
+	border:0;
+	width: 99%;
+}
+
+.ui-wizard-navbar {
+	width: 10%;
+	
+	
+}
+
+
+/*SELECTONEMENU*/
+.ui-selectonemenu-items-wrapper{
+	font-size: 15px;
+	width: 300px;
+	
+}
+
+
+
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight{
+}
+
+.ui-shadow{
+	width: 10%;
+	
+}
+
+.ui-widget-content{
+	color:#31b4df;
+}
+
+.ui-selectonemenu .ui-widget .ui-state-default .ui-corner-all{
+	width: 20%;
+	
+}
+
+.ui-datatable-data.ui-widget-content{
+	font-size: 12px;
+}
+
+.ui-state-default{
+	font-size: 11px;	
+}
+
+.ui-paginator{
+	display: inline-flex !important;
+	
+}
+
+.ui-paginator .ui-paginator-page{
+	display: flex !important;
+}
+
+
+
+.ui-paginator .ui-paginator-first, .ui-paginator .ui-paginator-prev{
+	width: 5%;
+	display: flex !important;
+}
+
+.ui-paginator .ui-paginator-next, .ui-paginator .ui-paginator-last{
+	width: 5%;
+	display: flex !important;
+	float: right;
+}
+
+.ui-paginator-pages{
+	width: 100%;	
+	display: flex !important;
+}
+
+.ui-datatable .ui-paginator, .ui-datatable .ui-paginator{
+	width: 100%;
+	border: #ffffff;
+	background: #d9e6e8;
+}
+
+.ui-paginator-page .ui-state-default .ui-corner-all{
+	width: 3%;
+}
+
+
+
+.ui-paginator .ui-paginator-page{
+	width: 3%;
+	color:#5ca3a3;
+}
+
+.ui-wizard-step-titles.ui-helper-clearfix{
+	display: flex !important;
+	width: 35%;
+	height:10%;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default{
+	font-size: 13px;
+	font-weight: bolder;
+	
+}
+
+.ui-panel {
+	border-color: #37bdc8 !important;	
+	width: 99% !important;
+}
+
+.ui-messages-error{
+	font-size: 11px;
+	
+}
+
+.ui-messages-info{
+	font-size: 11px;
+	
+}
+
+
+.ui-dialog-titlebar-icon{
+	float: right;
+}
+
+.ui-datepicker  {
+	font-size: 12px !important;
+	color: #3989c4;
+}
+
+.ui-datepicker-title  {
+	width:100%;
+	margin:1%;
+	font-size:10px;
+	color: #3989c4;
+	margin: 0!important;
+	
+}
+
+.ui_tpicker_time_input{
+	border-bottom: 0 !important;
+	border-color: #ffffff;	
+}
+
+.ui-datepicker{
+	background: #3a7b85;
+	color: #ffffff;
+}
+
+.ui-datepicker-header{
+	height:98%;
+	width: 99%;
+	font-size:12px !important;
+	border: 0;
+}
+
+
+
+.ui-datepicker-title{
+	font-size: 12px;	
+}
+
+.ui-selectonemenu-panel {
+	width: 30% !important;
+}
+
+
+.ui-selectonemenu.ui-widget.ui-state-default.ui-corner-all{
+	max-width: 98% !important;
+	min-width: 60% !important;
+}
+
+
+.ui-selectonemenu-items-wrapper{
+	width: 98% !important;	
+}
+
+.ui-dialog .ui-dialog-titlebar-close, .ui-dialog .ui-dialog-titlebar-minimize, .ui-dialog .ui-dialog-titlebar-maximize{
+	width: 3% !important;
+	margin-right: 2% !important;
+	float: right !important;
+	color:  #3a7b85 !important;
+}
+
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-icon-left.ui-confirmdialog-yes{
+	margin-left: 28% !important;
+	width: 25% !important;
+}
+
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-icon-left.ui-confirmdialog-no{
+	width: 25% !important;
+}
+
+.ui-confirm-dialog-message{
+	font-size: 18px !important;
+	font-family:sans-serif;
+	color:  #3a7b85 !important;
+}
+
+.ui-dialog-title{
+	font-size: 16px !important;
+	
+}
+
+.ui-confirm-dialog.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-shadow.ui-hidden-container{
+	width: 40% !important;
+}
+
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-icon-left.ui-fileupload-choose{
+	width: 30% !important;
+}
+
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-icon-left.ui-state-disabled.ui-fileupload-upload{
+	width: 30% !important;
+	
+}
+
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-icon-left.ui-state-disabled.ui-fileupload-cancel{
+	width: 30% !important;
+}
+
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-icon-left.ui-fileupload-upload{
+	width: 30% !important;
+	
+}
+
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-icon-left.ui-fileupload-cancel{
+	width: 30% !important;
+	
+}
+
+.ui-fileupload.ui-widget{
+	width: 50% !important;
+}
+
+.ui-overlaypanel.ui-widget.ui-widget-content.ui-corner-all.ui-shadow.ui-overlay-visible{
+	width: 50% !important;
+}
+
+.ui-fileupload-files{
+	width: 50% !important;
+	font-size: 12px !important;
+	border: 1px;
+	
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active{
+	border-color: #ffffff !important;
+	
+}
+
+
+.ui-panelmenu .ui-panelmenu-header{
+	color: #ffffff;
+	background: #35414f url("/ppra-online/javax.faces.resource/images/ui-bg_dots-small_35_35414f_2x2.png.xhtml?ln=primefaces-hot-sneaks") 10% 90% repeat;
+}
+
+.ui-tabs-nav.ui-corner-all{
+	width: 150% !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/template/template_externos.xhtml">
+			<ui:define name="conteudo">
+			<p:fieldset legend="Cadastro" style="width:80%; margin-left:10%;margin-right:10%;">
+				 <p:wizard flowListener="#{usuarioMBean.onFlowProcess}" style="width:80%;">
+        				<p:tab id="dadosPessoais" title="Dados Pessoais">
+        				<p:panel>
+			                <p:panelGrid columns="6">
+				                <p:column>
+				                    <p:outputLabel value="Nome*"  />
+				                </p:column>
+				                <p:column>
+				                    <p:inputText required="true" validatorMessage="Nome obrigatório" value="#{usuarioMBean.usuario.nome}"  title="Nome"/>
+				                </p:column>
+								<p:column>
+				                    <p:outputLabel value="Sobrenome*" />
+								</p:column>
+								<p:column>
+				                    <p:inputText required="true" validatorMessage="Sobre obrigatório"  value="#{usuarioMBean.usuario.sobrenome}"  title="Sobrenome"/>
+								</p:column>			 
+								<p:column>
+				                   <p:outputLabel value="Email*" />
+								</p:column>
+								<p:column>
+				                    <p:inputText id="email" required="true" validatorMessage="Email obrigatório" value="#{usuarioMBean.usuario.email}">
+				                    	
+				                    </p:inputText>
+								</p:column>	
+								<p:column>
+				                    <p:outputLabel value="RG*" />
+								</p:column>
+								<p:column>
+				                    <p:inputMask mask="99.999.999-99" required="true" validatorMessage="Rg obrigatório" value="#{usuarioMBean.usuario.rg}" />
+								</p:column>		 
+								<p:column>
+				                    <p:outputLabel value="CPF*" />
+								</p:column>
+								<p:column>
+				                    <p:inputMask  mask="999.999.999-99" required="true" validatorMessage="CPF obrigatório" value="#{usuarioMBean.usuario.cpf}" />
+								</p:column>
+								<p:column>
+						           	<p:outputLabel value="Login*" />
+								</p:column>
+								<p:column>
+							    	<p:inputText required="true" validatorMessage="Login obrigatório" value="#{usuarioMBean.usuario.login}" />
+								</p:column>
+								<p:column>
+					            	<p:outputLabel value="Senha*" />
+	 							</p:column>
+	 							<p:column>
+				                	<p:password  required="true" validatorMessage="Senha obrigatória" value="#{usuarioMBean.usuario.senha}" />
+	 							</p:column>
+			               
+			               </p:panelGrid>
+			               </p:panel>
+			             </p:tab>
+			             
+			             <p:tab id="escolhaPlano" title="Plano/ Perfil">
+			             <p:panel style="width:110% !important;">
+			                <p:panelGrid columns="4" id="panel">
+				                <p:column>
+			                		<p:outputLabel value="Perfil"/>
+			                	</p:column>
+				                <p:column>
+				                    <p:selectOneMenu value="#{usuarioMBean.perfil.id}" >
+										<f:selectItem itemLabel="** Perfil" />
+										<f:selectItems value="#{usuarioMBean.perfilList}"
+											var="perfil" itemLabel="#{perfil.nome} - #{perfil.descricao}" itemValue="#{perfil.id}"/>
+											<p:ajax update="selPlano" event="change" listener="#{usuarioMBean.carregarPlanoPorPerfil}"/>
+									</p:selectOneMenu>
+				                </p:column>
+						             <p:column>
+					                	<p:outputLabel id="labPlano" value="Plano" />
+					               	 </p:column>
+						                <p:column>
+						                    <p:selectOneMenu id="selPlano" value="#{usuarioMBean.plano.id}"  >
+												<f:selectItem itemLabel="** Plano" />
+												<f:selectItems value="#{usuarioMBean.planoList}"
+													var="plano" itemLabel="#{plano.nome} - R$#{plano.valorPlano}" itemValue="#{plano.id}"/>
+													<p:ajax update="form" event="change" process="@this"/>
+											</p:selectOneMenu>
+						                </p:column>
+				             </p:panelGrid>
+				           </p:panel>
+				         </p:tab>
+			         </p:wizard>
+			   </p:fieldset>
+				           <h:panelGrid  style="width:10%; margin-left:2%;">
+				                <p:column>
+						            <p:commandButton value="SALVAR" icon="ui-icon-plus" action="#{usuarioMBean.salvar()}"/>
+				            	</p:column>
+				           </h:panelGrid>
+			</ui:define>
+	</ui:composition>

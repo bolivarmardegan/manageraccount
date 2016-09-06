@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<body>
+	<h:form>
+		<p:panelGrid columns="3">
+		<p:column >
+			<div id="header_logomarca">
+				<h:graphicImage library="imagens" name="logomarca_financeiro.png"		id="logomarcaFinanceiro" />
+			</div>
+		</p:column>
+	
+		<p:column>
+		</p:column>
+		<p:column>
+			<div id="header_usuario">
+				<p:panelGrid columns="2" style="font-size:5px;">
+					<p:column>
+						<p:outputLabel value="Usuário:"/>
+						<p:outputLabel  value=" #{usuarioSessionControler.usuarioLogado.nome} #{usuarioSessionControler.usuarioLogado.sobrenome}"/>
+					</p:column>
+					<p:column>
+						<p:outputLabel value="Plano:"/>
+						<p:outputLabel value=" #{usuarioSessionControler.usuarioLogado.plano.nome}" />
+					</p:column>
+					<p:column>
+						<p:outputLabel value="Email:"/>
+						<p:outputLabel value=" #{usuarioSessionControler.usuarioLogado.email}" />
+					</p:column>
+					
+				</p:panelGrid>
+			</div>
+		</p:column>
+		
+		</p:panelGrid>
+	</h:form>
+		
+</body>
+</html>
