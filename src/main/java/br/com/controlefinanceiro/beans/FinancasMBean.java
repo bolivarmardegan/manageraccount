@@ -89,27 +89,41 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 		this.gerarDatasDeControle();
 		this.setFluxoDePagina(Constants.INCLUSAO);
 	}
+	
+//	public void editar() {
+//		this.financa.setCategoriaFinanca(this.categoria);
+//		this.financa.setIdUsuario(this.usuSession.getUsuarioLogado().getId());
+//		this.financaDelegate.simplesInsert(this.financa);
+//		this.financa = new Financa();
+//		this.financas = this.financaDAO.buscarFinancasPorCategoria(this.categoria, this.usuSession.getUsuarioLogado());
+//		this.gerarSaldo();
+//		this.setFluxoDePagina(Constants.INCLUSAO);
+//		this.categoria = new CategoriaFinanca();
+//	}
 
 	public void salvar() {
-		this.categoria.setIdUsuario(this.usuSession.getUsuarioLogado().getId());
-		this.categoriaDelegate.simplesInsert(this.categoria);
-		CategoriaFinanca cate = this.categoriaDAO.buscarCategoriaPorNome(this.categoria.getNome(),
-				this.usuSession.getUsuarioLogado());
-		for (Financa fin : this.financas) {
-			fin.setIdUsuario(this.usuSession.getUsuarioLogado().getId());
-			fin.setCategoriaFinanca(cate);
-			this.financaDelegate.inserir(fin);
+		if(garantirAnoCoerente()){
+			this.conferirData();
+			this.categoria.setIdUsuario(this.usuSession.getUsuarioLogado().getId());
+			if(categoria.getId() == null){
+				this.categoriaDelegate.simplesInsert(this.categoria);
+			}
+			CategoriaFinanca cate = this.categoriaDAO.buscarCategoriaPorNome(this.categoria.getNome(),
+					this.usuSession.getUsuarioLogado());
+			this.financa.setIdUsuario(this.usuSession.getUsuarioLogado().getId());
+			this.financa.setCategoriaFinanca(cate);
+			this.financaDelegate.inserir(this.financa);
+			this.categoriaList = this.categoriaDAO.buscarCategoriasDoUsuario(this.usuSession.getUsuarioLogado());
+			this.setFluxoDePagina(Constants.INCLUSAO);
+			this.financas = new ArrayList<>();
+			this.financas = this.financaDAO.buscarFinancasPorCategoria(cate, this.usuSession.getUsuarioLogado());
+			this.gerarSaldo();
+			this.financa = new Financa();
 		}
-		this.categoriaList = this.categoriaDAO.buscarCategoriasDoUsuario(this.usuSession.getUsuarioLogado());
-		this.setFluxoDePagina(Constants.INCLUSAO);
-		this.financas = new ArrayList<>();
-		this.gerarSaldo();
-		this.categoria = new CategoriaFinanca();
 	}
 
 	public void adicionarFinanca() {
 		if(garantirAnoCoerente()){
-			this.conferirData();
 			if (this.opcao.equals("digitar") && this.getFluxoDePagina().equals(Constants.INCLUSAO)) {
 				this.financas = new ArrayList<Financa>();
 			}
@@ -129,25 +143,12 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 		}
 	}
 
-	public void editar() {
-		for (Financa fin : this.financas) {
-			if (fin.getId() == null) {
-				fin.setCategoriaFinanca(this.categoria);
-				fin.setIdUsuario(this.usuSession.getUsuarioLogado().getId());
-				this.financaDelegate.simplesInsert(fin);
-			}
-		}
-		this.gerarSaldo();
-		this.financa = new Financa();
-		this.financas = new ArrayList<>();
-		this.setFluxoDePagina(Constants.INCLUSAO);
-		this.categoria = new CategoriaFinanca();
-	}
 
 	public void limpar() {
 		this.financa = new Financa();
 		this.financas = new ArrayList<Financa>();
 		this.categoria = new CategoriaFinanca();
+	
 	}
 
 	public void carregarFinancasPorCategoriaInclude() {
@@ -177,6 +178,10 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 
 	public void editarUnidade(Financa fin) {
 		this.financaDelegate.alterar(fin);
+		this.financas = new ArrayList<>();
+		this.financas = this.financaDAO.buscarFinancasPorCategoria(this.categoria, this.usuSession.getUsuarioLogado());
+		this.gerarSaldo();
+		session.getRequestContext().update("formList:tabCate");
 	}
 
 	public void onRowCancel(Financa fin) {

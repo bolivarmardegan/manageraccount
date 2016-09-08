@@ -85,12 +85,21 @@
 							              <f:selectItem  itemLabel="Futuro" itemValue="false" style="font-size:9px;"/>
 									</p:selectOneRadio>
 								</p:column>
+								<p:column id="panelBtn">
+										<p:commandButton  icon="ui-icon-cancel"  title="Cancelar">
+												<p:ajax listener="#{financasMBean.limpar()}"
+												update="formFin:tabDados, formFin:panelFin, formFin:panelBtn, formFin:tabCadastroCal" event="click"/>
+										</p:commandButton>
+										<p:commandButton title="Salvar"
+											icon="ui-icon-plus"
+											action="#{financasMBean.salvar()}"
+											update="form,formFin:mess, formFin:tabDados, formFin:panelFin, formFin:tabFinancas" />
+									
+								</p:column>
+							
 							</p:panelGrid>							
 						</p:fieldset>
-					</p:column>
-					<p:column>
-						<p:commandButton icon="ui-icon-plus" title="Adicionar finança" 
-						action="#{financasMBean.adicionarFinanca()}"  update="formFin:mess, formFin:tabDados, formFin:panelFin, formFin:tabFinancas"/>
+						<br />
 					</p:column>
 		</p:panelGrid>
 		<p:fieldset id="panelFin" legend="Finanças" >
@@ -124,28 +133,7 @@
 		
 	</p:fieldset>
 	
-		<p:panelGrid columns="3" styleClass="panel_botoes" id="panelBtn">
-			<p:column>
-				<p:commandButton
-					rendered="#{financasMBean.opcao == ('digitar')}"
-					value="SALVAR" icon="ui-icon-plus"
-					action="#{financasMBean.salvar()}"
-					update="form,form:messages" />
-			</p:column>
-			<p:column>
-				<p:commandButton
-					rendered="#{financasMBean.opcao == ('selecionar')}"
-					value="ALTERAR" icon="ui-icon-plus"
-					action="#{financasMBean.editar()}"
-					update="form,form:messages" />
-			</p:column>
-			<p:column>
-				<p:commandButton value="LIMPAR" icon="ui-icon-refresh">
-					<p:ajax listener="#{financasMBean.limpar()}"
-						update="formFin:tabDados, formFin:panelFin, formFin:panelBtn, formFin:tabCadastroCal" event="click"/>
-				</p:commandButton>
-			</p:column>
-		</p:panelGrid>
+	
 	</h:form>
 </body>
 </html>
