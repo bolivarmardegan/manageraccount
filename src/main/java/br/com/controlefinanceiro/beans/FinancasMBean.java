@@ -17,7 +17,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.primefaces.event.FlowEvent;
+import org.primefaces.event.RowEditEvent;
+import org.primefaces.model.TreeNode;
 
+import br.com.controlefinanceiro.Helper.CriadroDeArvoresHelper;
 import br.com.controlefinanceiro.Helper.UsuarioSessionControler;
 import br.com.controlefinanceiro.core.AbstractDelegate;
 import br.com.controlefinanceiro.core.AbstractManagedBean;
@@ -71,6 +74,10 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 	private Calendar dataMaxima;
 	private Calendar dataMinima;
 	
+	 private TreeNode root;
+	@Inject
+	private CriadroDeArvoresHelper criadorTable;
+	 
 	@Override
 	public AbstractDelegate<Financa> getDelegateInstance() {
 		return this.financaDelegate;
@@ -85,6 +92,7 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 		this.categoriaList = new ArrayList<CategoriaFinanca>();
 		this.categoriaList = this.categoriaDAO.buscarCategoriasDoUsuario(this.usuSession.getUsuarioLogado());
 		this.categoria.setNome("Gerais");
+		this.root = this.criadorTable.geradorDeArvore(this.categoriaList, this.financaDAO, this.usuSession);
 		this.gerarSaldo();
 		this.gerarDatasDeControle();
 		this.setFluxoDePagina(Constants.INCLUSAO);
@@ -176,12 +184,18 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 			}
 	}
 
+
+	
 	public void editarUnidade(Financa fin) {
+//		TreeNode tree = (TreeNode)event.getObject();
+// 		this.financa = (Financa)tree.getData();
+ 		
+		//this.financa = (Financa)object;
 		this.financaDelegate.alterar(fin);
 		this.financas = new ArrayList<>();
 		this.financas = this.financaDAO.buscarFinancasPorCategoria(this.categoria, this.usuSession.getUsuarioLogado());
 		this.gerarSaldo();
-		session.getRequestContext().update("formList:tabCate");
+		
 	}
 
 	public void onRowCancel(Financa fin) {
@@ -355,6 +369,13 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 		this.dataMinima = dataMinima;
 	}
 	
+	public TreeNode getRoot() {
+		return root;
+	}
+	
+	public void setRoot(TreeNode root) {
+		this.root = root;
+	}
 	
 
 }

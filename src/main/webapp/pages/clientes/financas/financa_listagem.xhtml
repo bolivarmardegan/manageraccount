@@ -7,8 +7,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <body>
 	<h:form id="formList">
-	<p:fieldset style="width:150%;">
-		<p:panelGrid columns="3"  >
+	<p:panelGrid columns="2" style="width:160%;" >
 			<p:column>
 				<p:outputLabel value="Categoria da Finança" />
 			</p:column>
@@ -18,18 +17,16 @@
 						<f:selectItems 	value="#{financasMBean.categoriaList}" 	var="cate" itemLabel="#{cate.nome}"
 									itemValue="#{cate.id}" />
 						<p:ajax listener="#{financasMBean.carregarFinancasPorCate()}" event="change" 
-								update="pList,tabCate"/>
+								update="pList, tabCate"/>
 				</p:selectOneMenu>
 			</p:column>
 		</p:panelGrid>
-		<p:fieldset  legend="Finanças do Usuário #{usuarioSessionControler.usuarioLogado.nome}" >
-			<p:panelGrid columns="1" id="pList" >
-				<p:column>
-					<p:dataTable  editable="true" value="#{financasMBean.financas}" var="financa" rows="5" style="width:100%;" paginator="true" paginatorPosition="bottom">
-						
-						<p:ajax event="rowEdit" listener="#{financasMBean.editarUnidade(financa)}" update="form:messages" />
+		<p:fieldset  legend="Finanças do Usuário #{usuarioSessionControler.usuarioLogado.nome}"  style="width:155%;">
+					<p:dataTable style="width:100%;" id="pList"  editable="true" value="#{financasMBean.financas}" var="financa"  paginator="true" rows="5"
+					paginatorPosition="bottom">
+						<p:ajax  event="rowEdit" listener="#{financasMBean.editarUnidade(financa)}" update="form:messages, pList"/>
 	       				<p:ajax event="rowEditCancel" listener="#{financasMBean.onRowCancel(financa)}" update="form:messages" />
-								<p:column headerText="Nome" style="width:25%;">
+								<p:column headerText="Nome" sortBy="#{financa.nome}" style="width:25%;">
 									<p:cellEditor>
 										<f:facet name="output">
 											<p:outputLabel value="#{financa.nome}"/>
@@ -39,7 +36,7 @@
 					               		</f:facet>
 									</p:cellEditor>
 								</p:column>
-								<p:column headerText="Valor" style="width:10%;">
+								<p:column headerText="Valor" sortBy="#{financa.valor}" style="width:10%;">
 									<p:cellEditor>
 										<f:facet name="output">
 											<p:outputLabel value="#{financa.valor}"/>
@@ -49,7 +46,7 @@
 										</f:facet>
 									</p:cellEditor>
 								</p:column>
-								<p:column headerText="Vencimento" style="width:10%;">
+								<p:column headerText="Vencimento" sortBy="#{financa.dataVencimento}" style="width:10%;">
 									<p:cellEditor>
 										<f:facet name="output">
 											<p:outputLabel 	value="#{financa.dataVencimento}" 	 disabled="true">
@@ -64,7 +61,7 @@
 										</f:facet>
 									</p:cellEditor>
 								</p:column>
-								<p:column headerText="Tipo" style="width:10%;">
+								<p:column headerText="Tipo" sortBy="#{financa.tipoFinanca}" style="width:10%;">
 									<p:cellEditor>
 										<f:facet name="output">
 											<p:outputLabel value="#{financa.tipoFinanca}" />
@@ -74,27 +71,27 @@
 													<f:selectItem itemLabel="Tipo da Finança" />
 													<f:selectItems 	value="#{financasMBean.tipoFinancaList}"
 														var="tipo" itemLabel="#{tipo.nome}" itemValue="#{tipo.nome}" />
-										</p:selectOneMenu>
+												</p:selectOneMenu>
 										</f:facet>
 									</p:cellEditor>
 								</p:column>
-								<p:column headerText="Status" style="width:8%;">
+								<p:column headerText="Status" sortBy="#{financa.vencida}" style="width:15%;">
 									<p:outputLabel style="color:#ff0000;"  value="Vencida" rendered="#{financa.vencida == ('TRUE')}"/>
 									<p:outputLabel style="color:#2E8B57;" value="No Prazo" rendered="#{financa.vencida == ('FALSE')}"/>
 								</p:column>
-								<p:column headerText="Pgto." style="width:12%;">
+								<p:column headerText="Pgto." sortBy="#{financa.paga}" style="width:15%;">
 									<p:outputLabel style="color:#ff0000;"  value="pgto. Futuro" rendered="#{financa.paga == ('FALSE')}"/>
 									<p:outputLabel style="color:#2E8B57;" value="Paga" rendered="#{financa.paga == ('TRUE')}"/>
 								</p:column>
-								<p:column style="width:15px">
-							           <p:rowEditor style="widt:20%;"/>
-							       </p:column>
+								<p:column style="width:5%;">
+							           <p:rowEditor />
+							    </p:column>
 					</p:dataTable>
-				</p:column>
-					<p:panelGrid style="width:33%;margin-left:35%;" columns="2" id="tabCate" >
+					<br />
+					<p:panelGrid  style="width:33%;margin-left:35%;" columns="2" id="tabCate" >
 						 <f:facet name="header">
-					        <p:outputLabel rendered="#{financasMBean.categoria.nome == ('Geral')}" value="Saldo Geral de Finanças"/>
-					        <p:outputLabel rendered="#{financasMBean.categoria.nome != ('Geral')}" value="Saldo das Finanças #{financasMBean.categoria.nome}"/>
+					        <p:outputLabel rendered="#{financasMBean.categoria.nome == ('Geral')}" style="font-size:12px;" value="Saldo Geral de Finanças"/>
+					        <p:outputLabel rendered="#{financasMBean.categoria.nome != ('Geral')}" style="font-size:12px;" value="Saldo das Finanças #{financasMBean.categoria.nome}"/>
 					    </f:facet>
 						<p:column>
 							<p:outputLabel style="font-size:12px;" value="Total de Créditos"/>
@@ -116,12 +113,8 @@
 							<p:outputLabel rendered="#{financasMBean.saldo lt 0}" style="color:#ff0000;font-size:15px;"  value="#{financasMBean.saldo}"/>
 						</p:column>
 					</p:panelGrid>
-				</p:panelGrid>
 		</p:fieldset>
-		
-	</p:fieldset>
 	</h:form>
-	
 </body>
 </html>
 

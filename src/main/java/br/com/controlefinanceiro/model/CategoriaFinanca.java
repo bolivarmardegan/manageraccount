@@ -33,6 +33,13 @@ public class CategoriaFinanca implements Serializable{
 	@Column(name="ID_USUARIO")
 	private Integer idUsuario;
 	
+	public CategoriaFinanca() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public CategoriaFinanca(String nome) {
+		this.nome = nome;
+	}
 	public Integer getId() {
 		return id;
 	}
