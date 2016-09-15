@@ -127,6 +127,8 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 			this.financas = this.financaDAO.buscarFinancasPorCategoria(cate, this.usuSession.getUsuarioLogado());
 			this.gerarSaldo();
 			this.financa = new Financa();
+		}else{
+			this.financa.setDataVencimento(null);
 		}
 	}
 
@@ -138,6 +140,8 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 			this.financas.add(this.financa);
 			this.financa = new Financa();
 			this.setFluxoDePagina(Constants.ALTERACAO);
+		}else{
+			this.financa.setDataVencimento(null);
 		}
 	}
 
@@ -188,14 +192,21 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 	
 	public void editarUnidade(Financa fin) {
 //		TreeNode tree = (TreeNode)event.getObject();
-// 		this.financa = (Financa)tree.getData();
+ 		this.financa = fin;
  		
 		//this.financa = (Financa)object;
-		this.financaDelegate.alterar(fin);
+		if(garantirAnoCoerente()){
+			this.conferirData();
+			
+			this.financaDelegate.alterar(fin);
+			this.session.addMessageInfo("Finança "+fin.getNome()+" alterada com sucesso!","");
+		}else{
+			this.session.addMessageError("Erro ao Atualizar a Finança "+fin.getNome(),"");
+		}
 		this.financas = new ArrayList<>();
 		this.financas = this.financaDAO.buscarFinancasPorCategoria(this.categoria, this.usuSession.getUsuarioLogado());
 		this.gerarSaldo();
-		
+				
 	}
 
 	public void onRowCancel(Financa fin) {
@@ -248,12 +259,10 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 			
 			if(anoAtual - anoVencimento < 0 || (anoAtual - anoVencimento) >= 1 ){
 				session.addMessageInfo("A data informada excede um período válido", "");
-				this.financa.setDataVencimento(null);
 				return false;
 			}
 			if(dataVencimento.get(Calendar.DAY_OF_MONTH) > ultimoDiaMes || dataVencimento.get(Calendar.DAY_OF_MONTH) < 0){
 				session.addMessageInfo("A data informada excede um período válido", "");
-				this.financa.setDataVencimento(this.dataAtual);
 				return false;
 			}
 			if(mesVencimento < 1 || mesVencimento > 12){

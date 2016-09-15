@@ -18,8 +18,16 @@
 	</servlet-mapping>
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
-		<param-value>start</param-value>
+		<param-value>hot-sneaks</param-value>
 	</context-param>
+	<filter>
+		<filter-name>LoginFilter</filter-name>
+		<filter-class>br.com.controlefinanceiro.filter.LoginFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>LoginFilter</filter-name>
+		<url-pattern>/pages/*</url-pattern>
+	</filter-mapping>
 
 	
 </web-app>

@@ -49,10 +49,10 @@ public class Usuario implements Serializable{
 	@Pattern(regexp = ".+@.+\\.[a-z]+",message="Email inválido.")
 	@Column(name="EMAIL_USUARIO")
 	private String email;
-	@Column(name="CPF_USUARIO")
-	private String cpf;
-	@Column(name="RG_USUARIO")
-	private String rg;
+//	@Column(name="CPF_USUARIO")
+//	private String cpf;
+//	@Column(name="RG_USUARIO")
+//	private String rg;
 		
 	@ManyToOne
 	@JoinColumn(name = "ID_PERMISSOES_USUARIO")
@@ -118,18 +118,18 @@ public class Usuario implements Serializable{
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getCpf() {
-		return cpf;
-	}
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
-	public String getRg() {
-		return rg;
-	}
-	public void setRg(String rg) {
-		this.rg = rg;
-	}
+//	public String getCpf() {
+//		return cpf;
+//	}
+//	public void setCpf(String cpf) {
+//		this.cpf = cpf;
+//	}
+//	public String getRg() {
+//		return rg;
+//	}
+//	public void setRg(String rg) {
+//		this.rg = rg;
+//	}
 	
 	public PermissoesUsuario getPermissoesUsuario() {
 		return permissoesUsuario;

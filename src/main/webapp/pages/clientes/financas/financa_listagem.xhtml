@@ -26,7 +26,7 @@
 					paginatorPosition="bottom">
 						<p:ajax  event="rowEdit" listener="#{financasMBean.editarUnidade(financa)}" update="form:messages, pList"/>
 	       				<p:ajax event="rowEditCancel" listener="#{financasMBean.onRowCancel(financa)}" update="form:messages" />
-								<p:column headerText="Nome" sortBy="#{financa.nome}" style="width:25%;">
+								<p:column headerText="Nome" sortBy="#{financa.nome}" style="width:33%;">
 									<p:cellEditor>
 										<f:facet name="output">
 											<p:outputLabel value="#{financa.nome}"/>
@@ -46,7 +46,7 @@
 										</f:facet>
 									</p:cellEditor>
 								</p:column>
-								<p:column headerText="Vencimento" sortBy="#{financa.dataVencimento}" style="width:10%;">
+								<p:column headerText="Vencimento" sortBy="#{financa.dataVencimento}" style="width:13%;">
 									<p:cellEditor>
 										<f:facet name="output">
 											<p:outputLabel 	value="#{financa.dataVencimento}" 	 disabled="true">
@@ -75,11 +75,11 @@
 										</f:facet>
 									</p:cellEditor>
 								</p:column>
-								<p:column headerText="Status" sortBy="#{financa.vencida}" style="width:15%;">
+								<p:column headerText="Status" sortBy="#{financa.vencida}" style="width:10%;">
 									<p:outputLabel style="color:#ff0000;"  value="Vencida" rendered="#{financa.vencida == ('TRUE')}"/>
 									<p:outputLabel style="color:#2E8B57;" value="No Prazo" rendered="#{financa.vencida == ('FALSE')}"/>
 								</p:column>
-								<p:column headerText="Pgto." sortBy="#{financa.paga}" style="width:15%;">
+								<p:column headerText="Pgto." sortBy="#{financa.paga}" style="width:10%;">
 									<p:outputLabel style="color:#ff0000;"  value="pgto. Futuro" rendered="#{financa.paga == ('FALSE')}"/>
 									<p:outputLabel style="color:#2E8B57;" value="Paga" rendered="#{financa.paga == ('TRUE')}"/>
 								</p:column>

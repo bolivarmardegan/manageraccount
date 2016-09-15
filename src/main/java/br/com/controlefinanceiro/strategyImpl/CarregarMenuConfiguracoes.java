@@ -27,7 +27,7 @@ public class CarregarMenuConfiguracoes implements InterfaceMenu {
 				@Override
 				public boolean evaluate(Object object) {
 					Menu menuBase = (Menu) object;
-					if(usuario.getPermissoesUsuario().getNome().equals("ADMINISTRADOR") && menuBase.getTipoMenu().getNome().equals("Configuração")){
+					if(menuBase.getTipoMenu().getNome().toLowerCase().equals("configuração")){
 					DefaultSubMenu menuPrincipal = new DefaultSubMenu(menuBase.getNome());
 						List<SubMenus> subMenus = subMenuDAO.buscarSubMenusPorMenu(menuBase);
 						for (SubMenus subMenu12: subMenus) {

@@ -74,11 +74,17 @@ public class UsuarioMBean extends AbstractManagedBean<Usuario> implements Serial
 	}
 	
 	public void salvar(){
-		this.usuario.setPerfil(this.perfil);
-		this.usuario.setPlano(this.plano);
-		this.usuario.setPermissoesUsuario(this.permissoesList.get(0));
-		this.usuarioDelegate.inserir(this.usuario);
-		this.usuario = new Usuario();
+		try {
+			this.usuario.setPerfil(this.perfilList.get(1));
+			this.planoList = this.planoDAO.buscarPlanoPorPerfil(this.usuario.getPerfil().getId());
+			this.usuario.setPlano(this.planoList.get(0));
+			this.usuario.setPermissoesUsuario(this.permissoesList.get(0));
+			this.usuarioDelegate.inserir(this.usuario);
+			this.usuario = new Usuario();
+			this.redirectToPage(PagesUrl.LOGIN.getUrl(), true);
+		} catch (Exception e) {
+			session.addMessageError("Erro ao cadastrar");
+		}
 	}
 	
 	public void carregarPlanoPorPerfil(){
@@ -86,10 +92,15 @@ public class UsuarioMBean extends AbstractManagedBean<Usuario> implements Serial
 		this.planoList = this.planoDAO.buscarPlanoPorPerfil(this.perfil.getId());
 	}
 	
-	
-	public String onFlowProcess(FlowEvent event) {
-	    return event.getNewStep();
+	public void cancelar(){
+		this.usuario = new Usuario();
+		this.redirectToPage(PagesUrl.LOGIN.getUrl(), true);
 	}
+	
+	
+//	public String onFlowProcess(FlowEvent event) {
+//	    return event.getNewStep();
+//	}
 	
 	public void cadastrar(){
 		this.redirectToPage(PagesUrl.CADASTRO_USUARIO.getUrl(), true);

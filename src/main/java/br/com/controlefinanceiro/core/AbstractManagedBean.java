@@ -29,7 +29,6 @@ public abstract class AbstractManagedBean<T> {
 	
 
 	public T getBean() {
-
 		return bean;
 	}
 

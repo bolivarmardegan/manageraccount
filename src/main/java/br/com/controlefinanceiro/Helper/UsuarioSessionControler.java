@@ -26,7 +26,7 @@ public class UsuarioSessionControler extends AbstractManagedBean<UsuarioSessionC
 	
 	
 	public UsuarioSessionControler() {
-		System.out.println("passou no usuarioController");
+	
 	
 	}
 	@Override
@@ -36,6 +36,7 @@ public class UsuarioSessionControler extends AbstractManagedBean<UsuarioSessionC
 	
 	@PostConstruct
 	public void init() {
+		
 	}
 	
 	

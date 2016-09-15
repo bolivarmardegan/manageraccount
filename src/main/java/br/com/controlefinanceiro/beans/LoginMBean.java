@@ -78,13 +78,13 @@ public class LoginMBean extends AbstractManagedBean<Login> implements Serializab
 	}
 	
 	public void logar(){
-		this.usuario = this.usuarioDAO.buscarUsuarioPorLoginSenha(this.usuario);
-		this.menusPlano = this.planoDAO.buscarMenusDoPlano(this.usuario.getPlano());
-		if(this.usuario == null){
+		try {
+			this.usuario = this.usuarioDAO.buscarUsuarioPorLoginSenha(this.usuario);
+			this.menusPlano = this.planoDAO.buscarMenusDoPlano(this.usuario.getPlano());
+			this.carregarMenusDoUsuario();
+		} catch (Exception e) {
 			session.addMessageError("Usuário ou senha inválidos.");
 			this.usuario = new Usuario();
-		}else{
-			this.carregarMenusDoUsuario();
 		}
 	}
 	

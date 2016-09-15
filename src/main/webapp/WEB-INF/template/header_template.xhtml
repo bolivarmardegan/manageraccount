@@ -21,14 +21,20 @@
 				<p:panelGrid columns="2" style="font-size:5px;">
 					<p:column>
 						<p:outputLabel value="Usuário:"/>
+					</p:column>
+					<p:column>
 						<p:outputLabel  value=" #{usuarioSessionControler.usuarioLogado.nome} #{usuarioSessionControler.usuarioLogado.sobrenome}"/>
 					</p:column>
 					<p:column>
 						<p:outputLabel value="Plano:"/>
+					</p:column>
+					<p:column>
 						<p:outputLabel value=" #{usuarioSessionControler.usuarioLogado.plano.nome}" />
 					</p:column>
 					<p:column>
 						<p:outputLabel value="Email:"/>
+					</p:column>
+					<p:column>
 						<p:outputLabel value=" #{usuarioSessionControler.usuarioLogado.email}" />
 					</p:column>
 					

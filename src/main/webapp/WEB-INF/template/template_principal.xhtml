@@ -16,7 +16,7 @@
 </h:head>
 <body>
 	<p:layout fullPage="true">
-		<p:layoutUnit position="north" size="140">
+		<p:layoutUnit position="north" size="150">
 			<ui:include src="/WEB-INF/template/header_template.xhtml" />
 			<div id="linha_topo"/>
 			<ui:include src="/WEB-INF/template/menu_template.xhtml" />
@@ -36,9 +36,10 @@
 						</p:dialog>
 					<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
 				</h:form>
-		
 		</p:layoutUnit>
-		
+		<p:layoutUnit position="south" size="50" >
+			<ui:include src="/WEB-INF/template/footer_template.xhtml" />
+		</p:layoutUnit>
 
 	</p:layout>
 </body>

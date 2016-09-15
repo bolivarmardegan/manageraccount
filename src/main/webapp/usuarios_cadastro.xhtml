@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/template/template_externos.xhtml">
+			<ui:define name="conteudo">
+			<p:fieldset legend="Cadastro" style="width:60%;margin-top:12%; margin-left:18%;margin-right:10%;">
+			                <p:panelGrid columns="6">
+				                <p:column>
+				                    <p:outputLabel value="Nome*"  />
+				                </p:column>
+				                <p:column>
+				                    <p:inputText required="true" validatorMessage="Nome obrigatório" value="#{usuarioMBean.usuario.nome}"  title="Nome"/>
+				                </p:column>
+								<p:column>
+				                    <p:outputLabel value="Sobrenome*" />
+								</p:column>
+								<p:column>
+				                    <p:inputText required="true" validatorMessage="Sobre obrigatório"  value="#{usuarioMBean.usuario.sobrenome}"  title="Sobrenome"/>
+								</p:column>			 
+								<p:column>
+				                   <p:outputLabel value="Email*" />
+								</p:column>
+								<p:column>
+				                    <p:inputText id="email" required="true" validatorMessage="Email obrigatório" value="#{usuarioMBean.usuario.email}">
+				                    	
+				                    </p:inputText>
+								</p:column>	
+
+								<p:column>
+						           	<p:outputLabel value="Login*" />
+								</p:column>
+								<p:column>
+							    	<p:inputText required="true" validatorMessage="Login obrigatório" value="#{usuarioMBean.usuario.login}" />
+								</p:column>
+								<p:column>
+					            	<p:outputLabel value="Senha*" />
+	 							</p:column>
+	 							<p:column>
+				                	<p:password  required="true" validatorMessage="Senha obrigatória" value="#{usuarioMBean.usuario.senha}" />
+	 							</p:column>
+			               
+			               </p:panelGrid>
+			   </p:fieldset>
+				           <h:panelGrid  style="width:8%; margin-left:18%;" columns="2">
+				                <p:column>
+						            <p:commandButton  title="Confirmar Cadastramento" icon="ui-icon-plus" action="#{usuarioMBean.salvar()}"/>
+				            	</p:column>
+				            	 <p:column>
+						            <p:commandButton  title="Cancelar Cadastramento" icon="ui-icon-cancel" action="#{usuarioMBean.cancelar()}" process="@this"/>
+				            	</p:column>
+				           </h:panelGrid>
+			</ui:define>
+	</ui:composition>

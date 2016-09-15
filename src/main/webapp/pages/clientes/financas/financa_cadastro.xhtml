@@ -105,10 +105,10 @@
 		<p:fieldset id="panelFin" legend="Finanças" >
 					<p:dataTable id="tabFinancas" value="#{financasMBean.financas}" var="financa" rows="5" style="width:100%;" paginator="true" 
 						paginatorPosition="bottom">
-								<p:column headerText="Nome" style="width:30%;">
+								<p:column headerText="Nome" style="width:40%;">
 									<p:outputLabel value="#{financa.nome}"/>
 								</p:column>
-								<p:column headerText="Vencimento" style="width:10%;">
+								<p:column headerText="Vencimento" style="width:12%;">
 									<p:outputLabel 	value="#{financa.dataVencimento}" 	 disabled="true">
 													<f:converter converterId="dateConverter"/>
 												</p:outputLabel>
@@ -116,13 +116,13 @@
 								<p:column headerText="Valor" style="width:15%;">
 									<p:outputLabel value="#{financa.valor}"/>
 								</p:column>
-								<p:column headerText="Pgto." style="width:15%;">
+								<p:column headerText="Pgto." style="width:12%;">
 									<p:outputLabel style="color:#2E8B57;" rendered="#{financa.paga == ('true')}" value="Paga"/>
 									<p:outputLabel style="color:#ff0000;" rendered="#{financa.paga == ('false')}" value="pgto. Futuro"/>
 								</p:column>
-								<p:column headerText="Status" style="width:15%;">
-									<p:outputLabel style="color:#ff0000;" rendered="#{financa.vencida == ('true')}" value="Vencida"/>
-									<p:outputLabel  style="color:#2E8B57;" rendered="#{financa.vencida == ('false')}" value="No Prazo"/>
+								<p:column headerText="Status" style="width:12%;">
+									<p:outputLabel style="color:#ff0000;margin-left:10%;" rendered="#{financa.vencida == ('true')}" value="Vencida"/>
+									<p:outputLabel  style="color:#2E8B57;margin-left:10%;" rendered="#{financa.vencida == ('false')}" value="No Prazo"/>
 								</p:column>
 								<p:column style="width:6%;">
 									<p:commandButton update="tabFinancas" icon="ui-icon-trash" 
