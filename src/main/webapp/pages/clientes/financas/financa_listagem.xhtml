@@ -46,20 +46,10 @@
 										</f:facet>
 									</p:cellEditor>
 								</p:column>
-								<p:column headerText="Vencimento" sortBy="#{financa.dataVencimento}" style="width:13%;">
-									<p:cellEditor>
-										<f:facet name="output">
-											<p:outputLabel 	value="#{financa.dataVencimento}" 	 disabled="true">
-												<f:converter converterId="dateConverter"/>
-											</p:outputLabel>
-										</f:facet>
-										<f:facet name="input">
-											<p:inputMask mask="99/99/9999" required="true" requiredMessage="Data de vencimento obrigatória"
-												value="#{financa.dataVencimento}"
-												converter="dateConverter">
-											</p:inputMask>
-										</f:facet>
-									</p:cellEditor>
+								<p:column headerText="Vencimento" style="width:12%;">
+									<p:outputLabel 	value="#{financa.dataVencimento}" 	 disabled="true">
+													<f:converter converterId="dateConverter"/>
+												</p:outputLabel>
 								</p:column>
 								<p:column headerText="Tipo" sortBy="#{financa.tipoFinanca}" style="width:10%;">
 									<p:cellEditor>

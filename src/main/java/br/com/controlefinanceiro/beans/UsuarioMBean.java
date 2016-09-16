@@ -1,6 +1,9 @@
 package br.com.controlefinanceiro.beans;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +14,7 @@ import javax.inject.Named;
 
 import org.primefaces.event.FlowEvent;
 
+import br.com.controlefinanceiro.Helper.CriptografadorDeSenhas;
 import br.com.controlefinanceiro.core.AbstractDelegate;
 import br.com.controlefinanceiro.core.AbstractManagedBean;
 import br.com.controlefinanceiro.dao.PlanoDAO;
@@ -41,6 +45,8 @@ public class UsuarioMBean extends AbstractManagedBean<Usuario> implements Serial
 	private Plano plano;
 	@Inject
 	private Perfil perfil;
+	@Inject
+	private CriptografadorDeSenhas criptografador;
 	private List<Perfil> perfilList;
 	private List<Plano> planoList;
 	private List<Usuario> usuariosList;
@@ -75,6 +81,8 @@ public class UsuarioMBean extends AbstractManagedBean<Usuario> implements Serial
 	
 	public void salvar(){
 		try {
+			String senhaCriptografada = this.criptografador.convertStringToMd5(usuario.getSenha());
+			this.usuario.setSenha(senhaCriptografada);
 			this.usuario.setPerfil(this.perfilList.get(1));
 			this.planoList = this.planoDAO.buscarPlanoPorPerfil(this.usuario.getPerfil().getId());
 			this.usuario.setPlano(this.planoList.get(0));
@@ -101,6 +109,13 @@ public class UsuarioMBean extends AbstractManagedBean<Usuario> implements Serial
 //	public String onFlowProcess(FlowEvent event) {
 //	    return event.getNewStep();
 //	}
+	
+	
+	public void alterarSenha(){
+		
+	}
+	
+
 	
 	public void cadastrar(){
 		this.redirectToPage(PagesUrl.CADASTRO_USUARIO.getUrl(), true);

@@ -37,6 +37,9 @@
 				<p:column style="width:30%;">	
 					<p:commandButton icon="ui-icon-cart" value="Cadastro" action="#{usuarioMBean.cadastrar()}"  title="Assinar"/>
 				</p:column>
+				<p:column style="width:30%;">	
+					<p:commandLink  value="Esqueci minha senha" action="#{loginMBean.chamarFormUpdateSenha()}" />
+				</p:column>
 			</p:panelGrid>
 		</p:column>
 </p:panelGrid>

@@ -69,15 +69,15 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 	private BigDecimal debitos;
 	private BigDecimal creditos;
 	private BigDecimal saldo;
-	
-	private Calendar dataAtual ;
+
+	private Calendar dataAtual;
 	private Calendar dataMaxima;
 	private Calendar dataMinima;
-	
-	 private TreeNode root;
+
+	private TreeNode root;
 	@Inject
 	private CriadroDeArvoresHelper criadorTable;
-	 
+
 	@Override
 	public AbstractDelegate<Financa> getDelegateInstance() {
 		return this.financaDelegate;
@@ -97,23 +97,12 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 		this.gerarDatasDeControle();
 		this.setFluxoDePagina(Constants.INCLUSAO);
 	}
-	
-//	public void editar() {
-//		this.financa.setCategoriaFinanca(this.categoria);
-//		this.financa.setIdUsuario(this.usuSession.getUsuarioLogado().getId());
-//		this.financaDelegate.simplesInsert(this.financa);
-//		this.financa = new Financa();
-//		this.financas = this.financaDAO.buscarFinancasPorCategoria(this.categoria, this.usuSession.getUsuarioLogado());
-//		this.gerarSaldo();
-//		this.setFluxoDePagina(Constants.INCLUSAO);
-//		this.categoria = new CategoriaFinanca();
-//	}
 
 	public void salvar() {
-		if(garantirAnoCoerente()){
+		if (garantirAnoCoerente(this.financa)) {
 			this.conferirData();
 			this.categoria.setIdUsuario(this.usuSession.getUsuarioLogado().getId());
-			if(categoria.getId() == null){
+			if (categoria.getId() == null) {
 				this.categoriaDelegate.simplesInsert(this.categoria);
 			}
 			CategoriaFinanca cate = this.categoriaDAO.buscarCategoriaPorNome(this.categoria.getNome(),
@@ -127,20 +116,20 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 			this.financas = this.financaDAO.buscarFinancasPorCategoria(cate, this.usuSession.getUsuarioLogado());
 			this.gerarSaldo();
 			this.financa = new Financa();
-		}else{
+		} else {
 			this.financa.setDataVencimento(null);
 		}
 	}
 
 	public void adicionarFinanca() {
-		if(garantirAnoCoerente()){
+		if (garantirAnoCoerente(this.financa)) {
 			if (this.opcao.equals("digitar") && this.getFluxoDePagina().equals(Constants.INCLUSAO)) {
 				this.financas = new ArrayList<Financa>();
 			}
 			this.financas.add(this.financa);
 			this.financa = new Financa();
 			this.setFluxoDePagina(Constants.ALTERACAO);
-		}else{
+		} else {
 			this.financa.setDataVencimento(null);
 		}
 	}
@@ -150,63 +139,53 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 			this.financas.remove(financaProv);
 		} else {
 			this.financaDelegate.deletar(financaProv);
-			this.financas = this.financaDAO.buscarFinancasPorCategoria(this.categoria, this.usuSession.getUsuarioLogado());
+			this.financas = this.financaDAO.buscarFinancasPorCategoria(this.categoria,
+					this.usuSession.getUsuarioLogado());
 			this.gerarSaldo();
 		}
 	}
-
 
 	public void limpar() {
 		this.financa = new Financa();
 		this.financas = new ArrayList<Financa>();
 		this.categoria = new CategoriaFinanca();
-	
+
 	}
 
 	public void carregarFinancasPorCategoriaInclude() {
-		if(categoria.getId() == null){
+		if (categoria.getId() == null) {
 			this.financas = this.financaDAO.buscarFinancasDoUsuario(this.usuSession.getUsuarioLogado());
 			this.gerarSaldo();
 			this.categoria.setNome("Gerais");
-		}else{
+		} else {
 			this.categoria = this.categoriaDelegate.buscarPorId(this.categoria.getId());
-			this.financas = this.financaDAO.buscarFinancasPorCategoria(this.categoria, this.usuSession.getUsuarioLogado());
+			this.financas = this.financaDAO.buscarFinancasPorCategoria(this.categoria,
+					this.usuSession.getUsuarioLogado());
 		}
 		this.setFluxoDePagina(Constants.ALTERACAO);
 	}
 
 	public void carregarFinancasPorCate() {
-			this.financas = new ArrayList<Financa>();
-			if(categoria.getId() == null){
-				this.financas = this.financaDAO.buscarFinancasDoUsuario(this.usuSession.getUsuarioLogado());
-				this.gerarSaldo();
-				this.categoria.setNome("Gerais");
-			}else{
-				this.categoria = this.categoriaDelegate.buscarPorId(this.categoria.getId());
-				this.financas = this.financaDAO.buscarFinancasPorCategoria(this.categoria, this.usuSession.getUsuarioLogado());
-				this.gerarSaldo();
-			}
+		this.financas = new ArrayList<Financa>();
+		if (categoria.getId() == null) {
+			this.financas = this.financaDAO.buscarFinancasDoUsuario(this.usuSession.getUsuarioLogado());
+			this.gerarSaldo();
+			this.categoria.setNome("Gerais");
+		} else {
+			this.categoria = this.categoriaDelegate.buscarPorId(this.categoria.getId());
+			this.financas = this.financaDAO.buscarFinancasPorCategoria(this.categoria,
+					this.usuSession.getUsuarioLogado());
+			this.gerarSaldo();
+		}
 	}
 
-
-	
 	public void editarUnidade(Financa fin) {
-//		TreeNode tree = (TreeNode)event.getObject();
- 		this.financa = fin;
- 		
-		//this.financa = (Financa)object;
-		if(garantirAnoCoerente()){
-			this.conferirData();
-			
-			this.financaDelegate.alterar(fin);
-			this.session.addMessageInfo("Finança "+fin.getNome()+" alterada com sucesso!","");
-		}else{
-			this.session.addMessageError("Erro ao Atualizar a Finança "+fin.getNome(),"");
-		}
+		this.financaDelegate.alterar(fin);
+		this.session.addMessageInfo("Finança " + fin.getNome() + " alterada com sucesso!", "");
 		this.financas = new ArrayList<>();
 		this.financas = this.financaDAO.buscarFinancasPorCategoria(this.categoria, this.usuSession.getUsuarioLogado());
 		this.gerarSaldo();
-				
+
 	}
 
 	public void onRowCancel(Financa fin) {
@@ -230,49 +209,49 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 		}
 		this.setSaldo(this.getCreditos().subtract(this.getDebitos()));
 	}
-	
+
 	public void conferirData() {
 		Calendar dataVencimento = this.financa.getDataVencimento();
 		Calendar dataAtual = Calendar.getInstance();
-		if(dataAtual.after(dataVencimento)){
+		if (dataAtual.after(dataVencimento)) {
 			this.financa.setVencida(true);
 		}
 	}
-	
-	public void gerarDatasDeControle(){
+
+	public void gerarDatasDeControle() {
 		this.dataAtual = Calendar.getInstance();
 		this.dataMaxima = Calendar.getInstance();
 		this.dataMinima = Calendar.getInstance();
-		this.dataMaxima.add(Calendar.YEAR,1);
+		this.dataMaxima.add(Calendar.YEAR, 1);
 		dataMinima.add(Calendar.DATE, -365);
 	}
-	
-	public Boolean garantirAnoCoerente(){
-			Calendar dataAtual = Calendar.getInstance();
-			Calendar dataVencimento = this.financa.getDataVencimento();
-			int anoVencimento = dataVencimento.get(Calendar.YEAR);
-			int mesVencimento = dataVencimento.get(Calendar.MONTH);
-			int anoAtual = dataAtual.get(Calendar.YEAR);
-			Calendar mix = dataVencimento;
-			mix.set(Calendar.DAY_OF_MONTH,1);
-			int ultimoDiaMes = mix.getActualMaximum(Calendar.DAY_OF_MONTH);
-			
-			if(anoAtual - anoVencimento < 0 || (anoAtual - anoVencimento) >= 1 ){
-				session.addMessageInfo("A data informada excede um período válido", "");
-				return false;
-			}
-			if(dataVencimento.get(Calendar.DAY_OF_MONTH) > ultimoDiaMes || dataVencimento.get(Calendar.DAY_OF_MONTH) < 0){
-				session.addMessageInfo("A data informada excede um período válido", "");
-				return false;
-			}
-			if(mesVencimento < 1 || mesVencimento > 12){
-				return false;
-			}
-			return true;
-			
+
+	public Boolean garantirAnoCoerente(Financa financa) {
+		Calendar dataAtual = Calendar.getInstance();
+		Calendar dataVencimento = financa.getDataVencimento();
+		int anoVencimento = dataVencimento.get(Calendar.YEAR);
+		int mesVencimento = dataVencimento.get(Calendar.MONTH);
+		int diaMesVencimento = dataVencimento.get(Calendar.DAY_OF_MONTH);
+
+		int anoAtual = dataAtual.get(Calendar.YEAR);
+		Calendar mix = dataVencimento;
+		mix.set(Calendar.DAY_OF_MONTH, 1);
+		int ultimoDiaMes = mix.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+		if (anoAtual - anoVencimento < 0 || (anoAtual - anoVencimento) >= 1) {
+			session.addMessageInfo("A data informada excede um período válido", "");
+			return false;
+		}
+		if (diaMesVencimento > ultimoDiaMes || diaMesVencimento < 0) {
+			session.addMessageInfo("A data informada excede um período válido", "");
+			return false;
+		}
+		if (mesVencimento < 1 || mesVencimento > 12) {
+			return false;
+		}
+		return true;
+
 	}
-	
-	
 
 	public Financa getFinanca() {
 		return financa;
@@ -369,22 +348,21 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 	public void setDataMaxima(Calendar dataMaxima) {
 		this.dataMaxima = dataMaxima;
 	}
-	
+
 	public Calendar getDataMinima() {
 		return dataMinima;
 	}
-	
+
 	public void setDataMinima(Calendar dataMinima) {
 		this.dataMinima = dataMinima;
 	}
-	
+
 	public TreeNode getRoot() {
 		return root;
 	}
-	
+
 	public void setRoot(TreeNode root) {
 		this.root = root;
 	}
-	
 
 }

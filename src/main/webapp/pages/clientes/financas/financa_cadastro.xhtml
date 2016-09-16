@@ -63,13 +63,15 @@
 									<p:outputLabel value="Vencimento"/>
 								</p:column>
 								<p:column>
-									<p:calendar mask="99/99/9999" mindate="#{financasMBean.dataMinima.time}" maxdate="#{financasMBean.dataMaxima.time}"
+									<p:calendar pattern="dd/MM/yyyy" mindate="#{financasMBean.dataMinima.time}" maxdate="#{financasMBean.dataMaxima.time}"
 										value="#{financasMBean.financa.dataVencimento}" 
 										converter="dateConverter" locale="pt">
 									</p:calendar>
 									<p:dialog modal="true" resizable="false" header="Values"  showEffect="fold">
 								        <p:panelGrid id="display" >
-								            <h:outputText value="#{financasMBean.financa.dataVencimento}" />
+								            <h:outputText  value="#{financasMBean.financa.dataVencimento}">
+								            	<f:convertDateTime pattern="dd/MM/yyyy" />
+								            </h:outputText>
 										</p:panelGrid>
 										</p:dialog>
 									</p:column>

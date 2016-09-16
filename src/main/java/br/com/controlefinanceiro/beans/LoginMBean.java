@@ -12,6 +12,7 @@ import javax.inject.Named;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.MenuModel;
 
+import br.com.controlefinanceiro.Helper.CriptografadorDeSenhas;
 import br.com.controlefinanceiro.Helper.UsuarioSessionControler;
 import br.com.controlefinanceiro.core.AbstractDelegate;
 import br.com.controlefinanceiro.core.AbstractManagedBean;
@@ -57,6 +58,8 @@ public class LoginMBean extends AbstractManagedBean<Login> implements Serializab
 	private MenuDAO menuDAO;
 	@Inject
 	private CarregaMenusSistema carregarMenusSistema;
+	@Inject
+	private CriptografadorDeSenhas criptografador;
 	private List<Menu> menusPlano;
 	private List<MenuModel> menusCarregados;
 
@@ -79,6 +82,8 @@ public class LoginMBean extends AbstractManagedBean<Login> implements Serializab
 	
 	public void logar(){
 		try {
+			String senhaCript = this.criptografador.convertStringToMd5(this.usuario.getSenha());
+			this.usuario.setSenha(senhaCript);
 			this.usuario = this.usuarioDAO.buscarUsuarioPorLoginSenha(this.usuario);
 			this.menusPlano = this.planoDAO.buscarMenusDoPlano(this.usuario.getPlano());
 			this.carregarMenusDoUsuario();
@@ -108,6 +113,10 @@ public class LoginMBean extends AbstractManagedBean<Login> implements Serializab
 		this.menuConfiguracoes = new DefaultMenuModel();
 		this.menusCarregados = new ArrayList<MenuModel>();
 		this.menusPlano = new ArrayList<Menu>();
+	}
+	
+	public void chamarFormUpdateSenha(){
+		
 	}
 
 	public Usuario getUsuario() {
