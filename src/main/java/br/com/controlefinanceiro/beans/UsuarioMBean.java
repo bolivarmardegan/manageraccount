@@ -18,6 +18,7 @@ import br.com.controlefinanceiro.Helper.CriptografadorDeSenhas;
 import br.com.controlefinanceiro.core.AbstractDelegate;
 import br.com.controlefinanceiro.core.AbstractManagedBean;
 import br.com.controlefinanceiro.dao.PlanoDAO;
+import br.com.controlefinanceiro.dao.UsuarioDAO;
 import br.com.controlefinanceiro.delegate.PerfilDelegate;
 import br.com.controlefinanceiro.delegate.PermissoesUsuarioDelegate;
 import br.com.controlefinanceiro.delegate.PlanoDelegate;
@@ -62,6 +63,11 @@ public class UsuarioMBean extends AbstractManagedBean<Usuario> implements Serial
 	private PermissoesUsuarioDelegate permissoesUsuarioDelegate;
 	private List<PermissoesUsuario> permissoesList;
 	private Integer fluxoDePagina;
+	private String novaSenha;
+	private boolean solicitouNovaSenha;
+	@Inject
+	private UsuarioDAO usuarioDAO;
+	
 	
 	@Override
 	public AbstractDelegate<Usuario> getDelegateInstance() {
@@ -77,6 +83,7 @@ public class UsuarioMBean extends AbstractManagedBean<Usuario> implements Serial
 		this.perfilList = this.perfilDelegate.buscarTodos();
 		this.usuariosList = new ArrayList<Usuario>();
 		this.usuariosList = this.usuarioDelegate.buscarTodos();
+		this.solicitouNovaSenha = false;
 	}
 	
 	public void salvar(){
@@ -102,6 +109,8 @@ public class UsuarioMBean extends AbstractManagedBean<Usuario> implements Serial
 	
 	public void cancelar(){
 		this.usuario = new Usuario();
+		this.novaSenha = "";
+		this.setSolicitouNovaSenha(false);
 		this.redirectToPage(PagesUrl.LOGIN.getUrl(), true);
 	}
 	
@@ -111,10 +120,32 @@ public class UsuarioMBean extends AbstractManagedBean<Usuario> implements Serial
 //	}
 	
 	
+
 	public void alterarSenha(){
+		if(this.novaSenha.equals(this.usuario.getSenha())){
+			String senhaCript = this.criptografador.convertStringToMd5(novaSenha);
+			this.usuario.setSenha(senhaCript);
+			this.usuarioDelegate.alterar(this.usuario);
+			this.usuario = new Usuario();
+			this.redirectToPage(PagesUrl.LOGIN.getUrl(), true);
+			this.session.addMessageError("Senha alterada com Sucesso!");
+		}else{
+			this.session.addMessageError("Nova senha não confirmada!");
+		}
 		
 	}
 	
+	
+	public void verificarLoginemail(){
+		try {
+			this.usuario = this.usuarioDAO.buscarUserPorLoginEmail(this.usuario.getLogin(), this.usuario.getEmail());
+			usuario.setSenha("");
+			this.setSolicitouNovaSenha(true);
+		} catch (Exception e) {
+			this.session.addMessageError("Email ou Login inválidos!","");
+		}
+		
+	}
 
 	
 	public void cadastrar(){
@@ -193,6 +224,23 @@ public class UsuarioMBean extends AbstractManagedBean<Usuario> implements Serial
 	public void setPermissoesList(List<PermissoesUsuario> permissoesList) {
 		this.permissoesList = permissoesList;
 	}
+	public boolean isSolicitouNovaSenha() {
+		return solicitouNovaSenha;
+	}
+	
+	public void setSolicitouNovaSenha(boolean solicitouNovaSenha) {
+		this.solicitouNovaSenha = solicitouNovaSenha;
+	}
+	
+	public String getNovaSenha() {
+		return novaSenha;
+	}
+	
+	public void setNovaSenha(String novaSenha) {
+		this.novaSenha = novaSenha;
+	}
+	
+	
 	
 	
 }

@@ -15,29 +15,30 @@
 	
 </h:head>
 <body>
+	
 	<p:layout fullPage="true">
-		<p:layoutUnit position="north" size="150">
-			<ui:include src="/WEB-INF/template/header_template.xhtml" />
-			<div id="linha_topo"/>
-			<ui:include src="/WEB-INF/template/menu_template.xhtml" />
-		</p:layoutUnit>
+				<p:layoutUnit position="north" size="160">
+						<ui:include src="/WEB-INF/template/header_template.xhtml" />
+						<div id="linha_topo"/>
+						<ui:include src="/WEB-INF/template/menu_template.xhtml" />
+				</p:layoutUnit>
 		
 		<p:layoutUnit position="west" size="180" >
 			<ui:include src="/WEB-INF/template/west_template.xhtml" />
 		</p:layoutUnit>
 
-		<p:layoutUnit position="center" >
-				<h:form id="form">
+		<p:layoutUnit position="center">
+				<h:form id="form" >
 					<p:messages id="messages"/>
 					<ui:insert name="conteudo"/>
 					
 						<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
-					    	<p:graphicImage library="imagens" name="logomarca_financeiro.png" />
+					    	<p:graphicImage library="imagens" name="animacao_carregando.gif" />
 						</p:dialog>
 					<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
 				</h:form>
 		</p:layoutUnit>
-		<p:layoutUnit position="south" size="50" >
+		<p:layoutUnit position="south" size="55" >
 			<ui:include src="/WEB-INF/template/footer_template.xhtml" />
 		</p:layoutUnit>
 

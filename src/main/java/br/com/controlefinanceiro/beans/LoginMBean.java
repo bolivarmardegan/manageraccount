@@ -62,7 +62,8 @@ public class LoginMBean extends AbstractManagedBean<Login> implements Serializab
 	private CriptografadorDeSenhas criptografador;
 	private List<Menu> menusPlano;
 	private List<MenuModel> menusCarregados;
-
+	
+	
 	
 	
 	
@@ -78,6 +79,7 @@ public class LoginMBean extends AbstractManagedBean<Login> implements Serializab
 		this.menusPlano = new ArrayList<Menu>();
 		this.menuModel = new DefaultMenuModel();
 		this.menuConfiguracoes = new DefaultMenuModel();
+		
 	}
 	
 	public void logar(){
@@ -116,8 +118,12 @@ public class LoginMBean extends AbstractManagedBean<Login> implements Serializab
 	}
 	
 	public void chamarFormUpdateSenha(){
-		
+		this.redirectToPage(PagesUrl.RECUPERAR_SENHA_XHTML.getUrl(), true);
 	}
+	
+	
+	
+	
 
 	public Usuario getUsuario() {
 		return usuario;
@@ -179,6 +185,7 @@ public class LoginMBean extends AbstractManagedBean<Login> implements Serializab
 	public void setMenusCarregados(List<MenuModel> menusCarregados) {
 		this.menusCarregados = menusCarregados;
 	}
+	
 	
 	
 

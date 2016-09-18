@@ -13,12 +13,12 @@
 				<p:column>
 					<p:panelGrid columns="2" id="tabCate">
 						<p:column>
-							<p:outputLabel value="Categoria da Finança" />
+							<p:outputLabel value="Grupo da Finança" />
 						</p:column>
 						<p:column>
 							<p:selectOneMenu rendered="#{financasMBean.opcao == ('selecionar')}"
 								value="#{financasMBean.categoria.id}">
-								<f:selectItem itemLabel="Categoria" />
+								<f:selectItem itemLabel="Grupo" />
 								<f:selectItems
 									value="#{financasMBean.categoriaList}"
 									var="cate" itemLabel="#{cate.nome}"
@@ -81,12 +81,7 @@
 								<p:column>
 									<p:inputNumber symbol="R$" maxValue="999999999999"  value="#{financasMBean.financa.valor}"/>
 								</p:column>
-								<p:column>
-									<p:selectOneRadio id="paga" value="#{financasMBean.financa.paga}">
-							    	      <f:selectItem  itemLabel="Realizado " itemValue="true" style="font-size:9px;"/>
-							              <f:selectItem  itemLabel="Futuro" itemValue="false" style="font-size:9px;"/>
-									</p:selectOneRadio>
-								</p:column>
+							
 								<p:column id="panelBtn">
 										<p:commandButton  icon="ui-icon-cancel"  title="Cancelar">
 												<p:ajax listener="#{financasMBean.limpar()}"
@@ -96,9 +91,7 @@
 											icon="ui-icon-plus"
 											action="#{financasMBean.salvar()}"
 											update="form,formFin:mess, formFin:tabDados, formFin:panelFin, formFin:tabFinancas" />
-									
 								</p:column>
-							
 							</p:panelGrid>							
 						</p:fieldset>
 						<br />
@@ -107,7 +100,7 @@
 		<p:fieldset id="panelFin" legend="Finanças" >
 					<p:dataTable id="tabFinancas" value="#{financasMBean.financas}" var="financa" rows="5" style="width:100%;" paginator="true" 
 						paginatorPosition="bottom">
-								<p:column headerText="Nome" style="width:40%;">
+								<p:column headerText="Nome" style="width:46%;">
 									<p:outputLabel value="#{financa.nome}"/>
 								</p:column>
 								<p:column headerText="Vencimento" style="width:12%;">
@@ -118,18 +111,10 @@
 								<p:column headerText="Valor" style="width:15%;">
 									<p:outputLabel value="#{financa.valor}"/>
 								</p:column>
-								<p:column headerText="Pgto." style="width:12%;">
-									<p:outputLabel style="color:#2E8B57;" rendered="#{financa.paga == ('true')}" value="Paga"/>
-									<p:outputLabel style="color:#ff0000;" rendered="#{financa.paga == ('false')}" value="pgto. Futuro"/>
+								<p:column headerText="Tipo" style="width:15%;">
+									<p:outputLabel value="#{financa.tipoFinanca}"/>
 								</p:column>
-								<p:column headerText="Status" style="width:12%;">
-									<p:outputLabel style="color:#ff0000;margin-left:10%;" rendered="#{financa.vencida == ('true')}" value="Vencida"/>
-									<p:outputLabel  style="color:#2E8B57;margin-left:10%;" rendered="#{financa.vencida == ('false')}" value="No Prazo"/>
-								</p:column>
-								<p:column style="width:6%;">
-									<p:commandButton update="tabFinancas" icon="ui-icon-trash" 
-									actionListener="#{financasMBean.tirarDaLista(financa)}"/>
-								</p:column>
+								
 					</p:dataTable>
 		</p:fieldset>
 		

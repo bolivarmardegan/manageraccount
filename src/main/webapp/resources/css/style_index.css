@@ -1,18 +1,27 @@
+
+
 #body_style {
 	overflow: hidden;
 	width: 100%;
+	background: #000000;
 }
 
 #menu_esquerdo {
 	font-size: 0.8em;
 	overflow: hidden;
-	margin-top: 10%;
+	margin-top: 3%;
 }
 
 #corpoLogin {
 	margin-top: 250px;
 	margin-left: 500px;
 	margin-right: 320px;
+}
+
+
+#footer_template{
+	margin-top: 0,5%;
+	
 }
 
 #header_usuario {
@@ -22,8 +31,15 @@
 
 #header_logomarca {
 	float: left;
-	margin-top: 3%;
+	margin-top: 1%;
+	margin-left: 1%;
+}
+
+#header_logomarca_login{
+	float: left;
+	margin-top: 2%;
 	margin-left: 40%;
+	
 }
 
 #header_menu {
@@ -45,9 +61,14 @@
 
 #linha_topo {
 	height: 1px;
-	background: #c0c0c0;
-	width: 41.5%;
+	background: #669cc4;
+	width: 38.5%;
 	float: right;
+}
+
+#background_header{
+	background: #0c0c0c !important;
+	width: 100%;
 }
 
 .textos_dialogos_help {

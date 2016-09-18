@@ -134,15 +134,11 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 		}
 	}
 
-	public void tirarDaLista(Financa financaProv) {
-		if (financaProv.getId() == null) {
-			this.financas.remove(financaProv);
-		} else {
-			this.financaDelegate.deletar(financaProv);
+	public void tirarDaLista(Financa fin) {
+			this.financaDelegate.deletar(fin);
 			this.financas = this.financaDAO.buscarFinancasPorCategoria(this.categoria,
 					this.usuSession.getUsuarioLogado());
 			this.gerarSaldo();
-		}
 	}
 
 	public void limpar() {
@@ -213,9 +209,9 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 	public void conferirData() {
 		Calendar dataVencimento = this.financa.getDataVencimento();
 		Calendar dataAtual = Calendar.getInstance();
-		if (dataAtual.after(dataVencimento)) {
-			this.financa.setVencida(true);
-		}
+//		if (dataAtual.after(dataVencimento)) {
+//			this.financa.setVencida(true);
+//		}
 	}
 
 	public void gerarDatasDeControle() {

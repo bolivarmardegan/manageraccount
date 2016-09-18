@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/template/template_externos.xhtml">
+	<ui:define name="conteudo">
+		<p:fieldset legend="Recuperação de Senha"
+			style="width:30%;margin-top:12%; margin-left:33%;margin-right:10%;">
+			<p:panelGrid columns="2" rendered="#{usuarioMBean.solicitouNovaSenha eq ('FALSE')}">
+				<p:column>
+					<p:outputLabel value="Email*" />
+				</p:column>
+				<p:column>
+					<p:inputText  required="true"
+						validatorMessage="Email obrigatório"
+						value="#{usuarioMBean.usuario.email}">
+					</p:inputText>
+				</p:column>
+				<p:column>
+					<p:outputLabel value="Login*" />
+				</p:column>
+				<p:column>
+					<p:inputText required="true" validatorMessage="Nome obrigatório"
+						value="#{usuarioMBean.usuario.login}" title="Nome" />
+				</p:column>
+				<p:column>
+					<p:commandButton icon="ui-icon-search" action="#{usuarioMBean.verificarLoginemail()}" update="form, message"/>
+					<p:commandButton icon="ui-icon-refresh" action="#{usuarioMBean.cancelar()}" immediate="true" update="form, message"/>
+				</p:column>
+			</p:panelGrid>
+			
+			<p:panelGrid columns="2" rendered="#{usuarioMBean.solicitouNovaSenha eq ('TRUE')}">
+				<p:column>
+					<p:outputLabel value="Nova Senha*" />
+				</p:column>
+				<p:column>
+					<p:inputText  required="true"	validatorMessage="Email obrigatório"
+						value="#{usuarioMBean.novaSenha}">
+					</p:inputText>
+				</p:column>
+				<p:column>
+					<p:outputLabel value="Confirmação da Senha*" />
+				</p:column>
+				<p:column>
+					<p:inputText required="true" validatorMessage="Nome obrigatório"
+						value="#{usuarioMBean.usuario.senha}" title="Nome" />
+				</p:column>
+				<p:column>
+					<p:commandButton icon="ui-icon-person" action="#{usuarioMBean.alterarSenha()}"  update="form, message"/>
+						<p:commandButton icon="ui-icon-refresh" action="#{usuarioMBean.cancelar()}" immediate="true" update="form, message"/>
+				</p:column>
+			</p:panelGrid>
+		</p:fieldset>
+	</ui:define>
+</ui:composition>

@@ -22,4 +22,16 @@ public class UsuarioDAO extends AbstractDAO<Usuario>{
 		}
 	}
 
+	public Usuario buscarUserPorLoginEmail(String login, String email) {
+		String sql = "SELECT usuario FROM Usuario usuario WHERE usuario.login = :login AND usuario.email = :email";
+		Query query = em.createQuery(sql);
+		query.setParameter("login", login);
+		query.setParameter("email", email);
+		try {
+			return (Usuario) query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 }

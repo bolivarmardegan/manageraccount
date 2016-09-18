@@ -7,13 +7,10 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <body>
 	<h:form id="formList">
-	<p:panelGrid columns="2" style="width:160%;" >
-			<p:column>
-				<p:outputLabel value="Categoria da Finança" />
-			</p:column>
+	<p:panelGrid columns="1" style="width:30%;" >
 			<p:column>
 				<p:selectOneMenu value="#{financasMBean.categoria.id}">
-						<f:selectItem itemLabel="Geral" />
+						<f:selectItem itemLabel="Grupo da Finança" />
 						<f:selectItems 	value="#{financasMBean.categoriaList}" 	var="cate" itemLabel="#{cate.nome}"
 									itemValue="#{cate.id}" />
 						<p:ajax listener="#{financasMBean.carregarFinancasPorCate()}" event="change" 
@@ -21,10 +18,10 @@
 				</p:selectOneMenu>
 			</p:column>
 		</p:panelGrid>
-		<p:fieldset  legend="Finanças do Usuário #{usuarioSessionControler.usuarioLogado.nome}"  style="width:155%;">
-					<p:dataTable style="width:100%;" id="pList"  editable="true" value="#{financasMBean.financas}" var="financa"  paginator="true" rows="5"
+		<p:fieldset    style="width:155%;">
+					<p:dataTable style="width:100%;" id="pList"  editable="true" value="#{financasMBean.financas}" var="financa"  paginator="true" rows="4"
 					paginatorPosition="bottom">
-						<p:ajax  event="rowEdit" listener="#{financasMBean.editarUnidade(financa)}" update="form:messages, pList"/>
+						<p:ajax  event="rowEdit" listener="#{financasMBean.editarUnidade(financa)}" update="form:messages, pList, @form:tabCate"/>
 	       				<p:ajax event="rowEditCancel" listener="#{financasMBean.onRowCancel(financa)}" update="form:messages" />
 								<p:column headerText="Nome" sortBy="#{financa.nome}" style="width:33%;">
 									<p:cellEditor>
@@ -65,20 +62,18 @@
 										</f:facet>
 									</p:cellEditor>
 								</p:column>
-								<p:column headerText="Status" sortBy="#{financa.vencida}" style="width:10%;">
-									<p:outputLabel style="color:#ff0000;"  value="Vencida" rendered="#{financa.vencida == ('TRUE')}"/>
-									<p:outputLabel style="color:#2E8B57;" value="No Prazo" rendered="#{financa.vencida == ('FALSE')}"/>
-								</p:column>
-								<p:column headerText="Pgto." sortBy="#{financa.paga}" style="width:10%;">
-									<p:outputLabel style="color:#ff0000;"  value="pgto. Futuro" rendered="#{financa.paga == ('FALSE')}"/>
-									<p:outputLabel style="color:#2E8B57;" value="Paga" rendered="#{financa.paga == ('TRUE')}"/>
-								</p:column>
+							
 								<p:column style="width:5%;">
 							           <p:rowEditor />
 							    </p:column>
+							    <p:column style="width:6%;">
+									<p:commandButton  icon="ui-icon-trash" >
+										<p:ajax update="pList" listener="#{financasMBean.tirarDaLista(financa)}" event="click" />
+									</p:commandButton>
+								</p:column>
 					</p:dataTable>
 					<br />
-					<p:panelGrid  style="width:33%;margin-left:35%;" columns="2" id="tabCate" >
+					<p:panelGrid  style="width:33%;margin-left:1%;" columns="2" id="tabCate" >
 						 <f:facet name="header">
 					        <p:outputLabel rendered="#{financasMBean.categoria.nome == ('Geral')}" style="font-size:12px;" value="Saldo Geral de Finanças"/>
 					        <p:outputLabel rendered="#{financasMBean.categoria.nome != ('Geral')}" style="font-size:12px;" value="Saldo das Finanças #{financasMBean.categoria.nome}"/>

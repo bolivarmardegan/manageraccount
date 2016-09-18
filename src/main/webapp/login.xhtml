@@ -24,7 +24,7 @@
 						<p:outputLabel value="Senha:" />
 				</p:column>
 				<p:column>
-						<p:inputText value="#{loginMBean.usuario.senha}" />
+						<p:password value="#{loginMBean.usuario.senha}" />
 				</p:column>
 			</p:panelGrid>
 		</p:column>
@@ -35,7 +35,7 @@
 					<p:commandButton  icon="ui-icon-person" update="message, form" action="#{loginMBean.logar()}" value="Logar"  title="Entrar"/>
 				</p:column>
 				<p:column style="width:30%;">	
-					<p:commandButton icon="ui-icon-cart" value="Cadastro" action="#{usuarioMBean.cadastrar()}"  title="Assinar"/>
+					<p:commandButton icon="fa-cart-arrow-down" value="Cadastro" action="#{usuarioMBean.cadastrar()}"  title="Assinar"/>
 				</p:column>
 				<p:column style="width:30%;">	
 					<p:commandLink  value="Esqueci minha senha" action="#{loginMBean.chamarFormUpdateSenha()}" />

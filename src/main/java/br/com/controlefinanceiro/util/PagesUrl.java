@@ -4,7 +4,8 @@ public enum PagesUrl {
 	
 	CADASTRO_USUARIO   ("/usuarios_cadastro.xhtml"),
 	LOGIN    ("/login.xhtml"),
-	INDEX ("/index.xhtml");
+	INDEX ("/index.xhtml"), 
+	RECUPERAR_SENHA_XHTML ("/recuperar_senha.xhtml");
 	
 	
 	private final String url;

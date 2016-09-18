@@ -5,19 +5,15 @@
 }
 
 .ui-layout-pane-west {
-	background-color: #ffffff;
+	
 	padding: 0;
 	border: 0px;
 	
 }
 
 .ui-panelmenu .ui-panelmenu-header {
-	background-color: #bedcce;
-	background: #FFFFFF;
 	cursor:pointer;
-	padding: 0;
 	border: 0px;
-	border-top: solid 2px #29afdc;
 	width: 70%;
 }
 
@@ -62,12 +58,7 @@
 
 .ui-layout-unit.ui-widget.ui-widget-content.ui-corner-all.ui-layout-south.ui-layout-pane.ui-layout-pane-south
 .ui-layout-unit-content.ui-widget-content {
-	color: #2486a6;
-	
-	margin: 1%;
-	margin-left: 46%;
-	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-	font-size: 0.9em;
+	background: #35414f url("/ppra-online/javax.faces.resource/images/ui-bg_dots-small_35_35414f_2x2.png.xhtml?ln=primefaces-hot-sneaks") 10% 90% repeat;
 }
 
 .ui-menu, .ui-menubar, .ui-widget, .ui-widget-content, .ui-corner-all,
@@ -141,7 +132,7 @@
 .ui-password{
 	font-size: 13px !important;
 	color: #2061d9 !important;
-	padding: 1px !important;
+	
 	width: 100% !important;
 	
 }
@@ -195,7 +186,7 @@
 }
 
 .ui-state-default{
-	font-size: 11px;	
+	font-size: 11px;
 }
 
 .ui-paginator{
@@ -397,6 +388,7 @@
 
 .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active{
 	border-color: #ffffff !important;
+	
 	
 }
 
