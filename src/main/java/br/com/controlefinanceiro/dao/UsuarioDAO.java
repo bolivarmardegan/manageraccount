@@ -34,4 +34,16 @@ public class UsuarioDAO extends AbstractDAO<Usuario>{
 		}
 	}
 
+	public Usuario buscarUsuarioPorLogin(String login) {
+		String sql = "SELECT usuario FROM Usuario usuario WHERE usuario.login = :login";
+		Query query = em.createQuery(sql);
+		query.setParameter("login", login);
+		try {
+			return (Usuario) query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+		
+	}
+
 }

@@ -33,25 +33,25 @@
 					               		</f:facet>
 									</p:cellEditor>
 								</p:column>
-								<p:column headerText="Valor" sortBy="#{financa.valor}" style="width:10%;">
+								<p:column headerText="Valor" sortBy="#{financa.valor}" style="width:5%;">
 									<p:cellEditor>
 										<f:facet name="output">
-											<p:outputLabel value="#{financa.valor}"/>
+											<p:outputLabel style="margin-left:10%;" value="#{financa.valor}"/>
 										</f:facet>
 										<f:facet name="input">
 											<p:inputNumber symbol="R$" maxValue="999999999999"  value="#{financa.valor}"/>
 										</f:facet>
 									</p:cellEditor>
 								</p:column>
-								<p:column headerText="Vencimento" style="width:12%;">
-									<p:outputLabel 	value="#{financa.dataVencimento}" 	 disabled="true">
+								<p:column headerText="Vencimento" style="width:7%;">
+									<p:outputLabel style="margin-left:8%;"	value="#{financa.dataVencimento}" 	 disabled="true">
 													<f:converter converterId="dateConverter"/>
 												</p:outputLabel>
 								</p:column>
-								<p:column headerText="Tipo" sortBy="#{financa.tipoFinanca}" style="width:10%;">
+								<p:column headerText="Tipo" sortBy="#{financa.tipoFinanca}" style="width:5%;">
 									<p:cellEditor>
 										<f:facet name="output">
-											<p:outputLabel value="#{financa.tipoFinanca}" />
+											<p:outputLabel style="margin-left:14%;" value="#{financa.tipoFinanca}" />
 										</f:facet>
 										<f:facet name="input">
 												<p:selectOneMenu value="#{financa.tipoFinanca}">
@@ -63,11 +63,11 @@
 									</p:cellEditor>
 								</p:column>
 							
-								<p:column style="width:5%;">
+								<p:column style="width:2%;">
 							           <p:rowEditor />
 							    </p:column>
-							    <p:column style="width:6%;">
-									<p:commandButton  icon="ui-icon-trash" >
+							    <p:column style="width:3%;">
+									<p:commandButton  icon="fa fa-fw fa-trash" >
 										<p:ajax update="pList" listener="#{financasMBean.tirarDaLista(financa)}" event="click" />
 									</p:commandButton>
 								</p:column>

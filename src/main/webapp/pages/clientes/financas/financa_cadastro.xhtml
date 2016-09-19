@@ -8,7 +8,7 @@
 <body>
 <h:form id="formFin">
 	<p:messages id="mess"></p:messages>
-	<p:fieldset style="width:150%;" id="fieldFin">
+	<p:fieldset style="width:155%;" id="fieldFin">
 				<p:panelGrid columns="3"  id="tabCadastroCal">
 				<p:column>
 					<p:panelGrid columns="2" id="tabCate">
@@ -103,16 +103,16 @@
 								<p:column headerText="Nome" style="width:46%;">
 									<p:outputLabel value="#{financa.nome}"/>
 								</p:column>
-								<p:column headerText="Vencimento" style="width:12%;">
-									<p:outputLabel 	value="#{financa.dataVencimento}" 	 disabled="true">
+								<p:column headerText="Vencimento" style="width:8%;">
+									<p:outputLabel 	style="margin-left:8%;" value="#{financa.dataVencimento}" 	 disabled="true">
 													<f:converter converterId="dateConverter"/>
 												</p:outputLabel>
 								</p:column>
-								<p:column headerText="Valor" style="width:15%;">
-									<p:outputLabel value="#{financa.valor}"/>
+								<p:column headerText="Valor" style="width:6%;">
+									<p:outputLabel style="margin-left:8%;" value="#{financa.valor}"/>
 								</p:column>
-								<p:column headerText="Tipo" style="width:15%;">
-									<p:outputLabel value="#{financa.tipoFinanca}"/>
+								<p:column headerText="Tipo" style="width:7%;">
+									<p:outputLabel style="margin-left:8%;" value="#{financa.tipoFinanca}"/>
 								</p:column>
 								
 					</p:dataTable>

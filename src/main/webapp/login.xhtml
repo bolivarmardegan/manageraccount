@@ -8,7 +8,7 @@
 	template="/WEB-INF/template/template_externos.xhtml">
 	<ui:define name="conteudo">
 
-			<p:fieldset legend="Controle Financeiro" style="width:50%;margin-top:10%; margin-left:25%;">
+			<p:fieldset legend="© Manager Account" style="width:50%;margin-top:10%; margin-left:25%;">
 			
 	<p:panelGrid columns="2" >
 		<p:column >
@@ -32,10 +32,10 @@
 		<p:column>
 			<p:panelGrid columns="2" style="float:right;">
 				<p:column style="width:30px;">
-					<p:commandButton  icon="ui-icon-person" update="message, form" action="#{loginMBean.logar()}" value="Logar"  title="Entrar"/>
+					<p:commandButton  icon="fa fa-fw fa-user" update="message, form" action="#{loginMBean.logar()}" value="Logar"  title="Entrar"/>
 				</p:column>
 				<p:column style="width:30%;">	
-					<p:commandButton icon="fa-cart-arrow-down" value="Cadastro" action="#{usuarioMBean.cadastrar()}"  title="Assinar"/>
+					<p:commandButton icon="fa fa-fw fa-user-plus" value="Cadastro" action="#{usuarioMBean.cadastrar()}"  title="Assinar"/>
 				</p:column>
 				<p:column style="width:30%;">	
 					<p:commandLink  value="Esqueci minha senha" action="#{loginMBean.chamarFormUpdateSenha()}" />

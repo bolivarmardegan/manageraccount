@@ -28,6 +28,9 @@
 		<filter-name>LoginFilter</filter-name>
 		<url-pattern>/pages/*</url-pattern>
 	</filter-mapping>
-
+	<context-param>
+		<param-name>primefaces.FONT_AWESOME</param-name>
+		<param-value>true</param-value>
+	</context-param>
 	
 </web-app>

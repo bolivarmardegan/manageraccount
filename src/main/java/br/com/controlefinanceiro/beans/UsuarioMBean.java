@@ -119,7 +119,14 @@ public class UsuarioMBean extends AbstractManagedBean<Usuario> implements Serial
 //	    return event.getNewStep();
 //	}
 	
-	
+	public void validarLoginCadastro(){
+		
+		Usuario buscarUsuarioPorLogin = this.usuarioDAO.buscarUsuarioPorLogin(this.usuario.getLogin());
+		if(buscarUsuarioPorLogin != null){
+			this.session.addMessageInfo("O login "+this.usuario.getLogin()+" está indisponível.", "");
+			this.usuario.setLogin("");
+		}
+	}
 
 	public void alterarSenha(){
 		if(this.novaSenha.equals(this.usuario.getSenha())){

@@ -176,11 +176,15 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 	}
 
 	public void editarUnidade(Financa fin) {
-		this.financaDelegate.alterar(fin);
-		this.session.addMessageInfo("Finança " + fin.getNome() + " alterada com sucesso!", "");
-		this.financas = new ArrayList<>();
-		this.financas = this.financaDAO.buscarFinancasPorCategoria(this.categoria, this.usuSession.getUsuarioLogado());
-		this.gerarSaldo();
+		try {
+			this.financaDelegate.alterar(fin);
+			this.session.addMessageInfo("Finança " + fin.getNome() + " alterada com sucesso!", "");
+			this.financas = new ArrayList<>();
+			this.financas = this.financaDAO.buscarFinancasPorCategoria(this.categoria, this.usuSession.getUsuarioLogado());
+			this.gerarSaldo();
+		} catch (Exception e) {
+			this.session.addMessageError("Falha ao atualizar a Finança "+this.financa.getNome());
+		}
 
 	}
 

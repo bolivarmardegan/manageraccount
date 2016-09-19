@@ -33,8 +33,10 @@
 								<p:column>
 						           	<p:outputLabel value="Login*" />
 								</p:column>
-								<p:column>
-							    	<p:inputText required="true" validatorMessage="Login obrigatório" value="#{usuarioMBean.usuario.login}" />
+								<p:column >
+							    	<p:inputText id="loginIn" required="true" validatorMessage="Login obrigatório" value="#{usuarioMBean.usuario.login}">
+							    		<p:ajax listener="#{usuarioMBean.validarLoginCadastro()}" event="change" update="loginIn, message"/>
+							    	</p:inputText>
 								</p:column>
 								<p:column>
 					            	<p:outputLabel value="Senha*" />
@@ -47,10 +49,10 @@
 			   </p:fieldset>
 				           <h:panelGrid  style="width:8%; margin-left:18%;" columns="2">
 				                <p:column>
-						            <p:commandButton  title="Confirmar Cadastramento" icon="ui-icon-plus" action="#{usuarioMBean.salvar()}"/>
+						            <p:commandButton  title="Confirmar Cadastramento" icon="fa fa-fw fa-floppy-o" action="#{usuarioMBean.salvar()}"/>
 				            	</p:column>
 				            	 <p:column>
-						            <p:commandButton  title="Cancelar Cadastramento" icon="ui-icon-cancel" action="#{usuarioMBean.cancelar()}" process="@this"/>
+						            <p:commandButton  title="Cancelar Cadastramento" icon="fa fa-fw fa-close" action="#{usuarioMBean.cancelar()}" process="@this"/>
 				            	</p:column>
 				           </h:panelGrid>
 			</ui:define>
