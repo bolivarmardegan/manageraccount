@@ -403,6 +403,10 @@
 }
 
 
+.ui-state-default,.ui-tabs-selected, .ui-state-active,.ui-corner-top{
+	font-size: 12px !important;
+}
+
 
 
 
