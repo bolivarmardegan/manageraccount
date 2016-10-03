@@ -13,11 +13,16 @@ import br.com.controlefinanceiro.model.Usuario;
 public class CategoriaFinancaDAO extends AbstractDAO<CategoriaFinanca>{
 
 	public CategoriaFinanca buscarCategoriaPorNome(String nome, Usuario usuarioLogado) {
-		String sql = "SELECT categoria FROM CategoriaFinanca categoria WHERE categoria.nome = :nome AND categoria.idUsuario = :idUsuario";
-		Query query = em.createQuery(sql);
-		query.setParameter("nome", nome);
-		query.setParameter("idUsuario", usuarioLogado.getId());
-		return (CategoriaFinanca) query.getSingleResult();
+		try {
+			String sql = "SELECT categoria FROM CategoriaFinanca categoria WHERE categoria.nome = :nome AND categoria.idUsuario = :idUsuario";
+			Query query = em.createQuery(sql);
+			query.setParameter("nome", nome);
+			query.setParameter("idUsuario", usuarioLogado.getId());
+			return (CategoriaFinanca) query.getSingleResult();
+			
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	public List<CategoriaFinanca> buscarCategoriasDoUsuario(Usuario usuarioLogado) {

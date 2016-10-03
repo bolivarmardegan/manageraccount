@@ -117,19 +117,27 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 	public void salvar() {
 		if (garantirAnoCoerente(this.financa)) {
 			this.conferirData();
-			this.categoria.setIdUsuario(this.usuSession.getUsuarioLogado().getId());
-			if (categoria.getId() == null) {
-				this.categoriaDelegate.simplesInsert(this.categoria);
+			if (this.categoria.getId() == null) {
+				this.categoria.setIdUsuario(this.usuSession.getUsuarioLogado().getId());
+				CategoriaFinanca categoriaPorNome = this.categoriaDAO.buscarCategoriaPorNome(this.categoria.getNome(), this.usuSession.getUsuarioLogado());
+				if(categoriaPorNome == null){
+					this.categoriaDelegate.simplesInsert(this.categoria);
+					this.categoriaList = this.categoriaDAO.buscarCategoriasDoUsuario(this.usuSession.getUsuarioLogado());
+					CategoriaFinanca categoriaNome = this.categoriaDAO.buscarCategoriaPorNome(this.categoria.getNome(), this.usuSession.getUsuarioLogado());
+					this.categoria = categoriaNome;
+					
+				}else
+					this.categoria = categoriaPorNome;
 			}
-			CategoriaFinanca cate = this.categoriaDAO.buscarCategoriaPorNome(this.categoria.getNome(),
-					this.usuSession.getUsuarioLogado());
+//			CategoriaFinanca cate = this.categoriaDAO.buscarCategoriaPorNome(this.categoria.getNome(),
+//					this.usuSession.getUsuarioLogado());
 			this.financa.setIdUsuario(this.usuSession.getUsuarioLogado().getId());
-			this.financa.setCategoriaFinanca(cate);
+			this.financa.setCategoriaFinanca(this.categoria);
 			this.financaDelegate.inserir(this.financa);
 			this.categoriaList = this.categoriaDAO.buscarCategoriasDoUsuario(this.usuSession.getUsuarioLogado());
 			this.setFluxoDePagina(Constants.INCLUSAO);
 			this.financas = new ArrayList<>();
-			this.financas = this.financaDAO.buscarFinancasPorCategoria(cate, this.usuSession.getUsuarioLogado());
+			this.financas = this.financaDAO.buscarFinancasPorCategoria(this.categoria, this.usuSession.getUsuarioLogado());
 			this.gerarSaldo();
 			this.financa = new Financa();
 		} else {
@@ -274,10 +282,15 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 	        HSSFSheet sheet = wb.getSheetAt(0);
 	        HSSFRow header = sheet.getRow(0);
 	         
+	        sheet.setHorizontallyCenter(true);
+	       
+	        
 	        HSSFCellStyle cellStyle = wb.createCellStyle();  
 	        cellStyle.setFillForegroundColor(HSSFColor.GREEN.index);
 	        cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-	         
+	        
+	        
+	        
 	        for(int i=0; i < header.getPhysicalNumberOfCells();i++) {
 	            HSSFCell cell = header.getCell(i);
 	             
@@ -289,11 +302,21 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 	        Document pdf = (Document) document;
 	        pdf.open();
 	        pdf.setPageSize(PageSize.A4);
-	 
+	        
+	        
+	        
 	        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-	        String logo = externalContext.getRealPath("") + File.separator + "resources" + File.separator + "demo" + File.separator + "images" + File.separator + "prime_logo.png";
+	        externalContext.getApplicationMap();
+	        //pdf.add(arg0)
+	        String logo = externalContext.getRealPath("") + File.separator + "resources" + File.separator + "imagens" +  File.separator + "logo_manageraccount.png";
 	         
 	        pdf.add(Image.getInstance(logo));
+	        
+	        pdf.addHeader("Total de Débitos",String.valueOf(debitos));
+	        pdf.addHeader("Total de Créditos",String.valueOf(creditos));
+	        pdf.addHeader("Saldo: ",String.valueOf(saldo));
+	        
+	        
 	    }
 	
 	

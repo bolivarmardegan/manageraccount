@@ -8,6 +8,7 @@
 	template="/WEB-INF/template/template_principal.xhtml">
 	<ui:define name="conteudo">
 		<!-- MENSAGEM DE AJUDA -->
+	
 		<p:tabView>
 			<p:tab title="Nova Finança">
 				<p:fieldset style="width:155%;" id="fieldFin">
@@ -97,7 +98,7 @@
 										</p:commandButton>
 										<p:commandButton title="Salvar" icon="ui-icon-plus"
 											action="#{financasMBean.salvar()}"
-											update="form,tabDados,panelFin, tabFinancas" />
+											update="tabDados,panelFin, tabFinancas" />
 									</p:column>
 								</p:panelGrid>
 							</p:fieldset>
@@ -173,7 +174,7 @@
 
 				</p:fieldset>
 			</p:tab>
-			<p:tab title="Saldo"  id="tabsaldo"  >
+			<p:tab title="Saldo"  id="tabsaldo" >
 				<p:panelGrid columns="2" style="width:50%;">
 				<p:column>
 					<h:outputLabel value="Grupo da Finança" />
@@ -184,96 +185,161 @@
 							<f:selectItems value="#{financasMBean.categoriaList}" var="cate"
 								itemLabel="#{cate.nome}" itemValue="#{cate.id}" />
 							<p:ajax listener="#{financasMBean.carregarFinancasPorCate()}"
-								event="change" update="pList, tabCate1" />
+								event="change" update="pList" />
 						</p:selectOneMenu>
 					</p:column>
 				</p:panelGrid>
-				<p:fieldset style="width:155%;" >
-						<p:fieldset>
+				<p:fieldset style="width:156%;" >
+						<p:fieldset >
 					<p:tabView  id="pList" editable="true"
-						value="#{financasMBean.financas}" var="financa" >
+						value="#{financasMBean.financas}" var="financa" style="width:65%;">
 						<p:tab title="#{financa.nome}">
+							<p:panelGrid columns="2" style="width:150%;">
+							<p:column>
 							<p:panelGrid columns="2">
 								<p:column>
-									<h:outputLabel value="Nome" /><br/>
+									<h:outputLabel style="font-size:13px;" value="Nome" /><br/>
 								</p:column>
 								<p:column>
-									<h:outputLabel value="#{financa.nome}" /><br/>
+									<h:outputLabel style="font-size:13px;" value="#{financa.nome}" /><br/>
 								</p:column>
 								<p:column>
-									<h:outputLabel value="Valor" /><br/>
+									<h:outputLabel style="font-size:13px;" value="Valor" /><br/>
 								</p:column>
 								<p:column>
-									<p:outputLabel value="#{financa.valor}" /><br/>
+									<p:outputLabel style="font-size:13px;" value="#{financa.valor}" /><br/>
 								</p:column>
 								<p:column>
-									<h:outputLabel value="Vencimento" /><br/>
+									<h:outputLabel style="font-size:13px;" value="Vencimento" /><br/>
 								</p:column>
 								<p:column>
-									<p:outputLabel 
+									<p:outputLabel style="font-size:13px;"
 									value="#{financa.dataVencimento}" disabled="true">
 									<f:converter converterId="dateConverter" />
 								</p:outputLabel>
 								</p:column>
 								<p:column>
-									<h:outputLabel value="Tipo" /><br/>
+									<h:outputLabel style="font-size:13px;" value="Tipo" /><br/>
 								</p:column>
 								<p:column>
-									<h:outputLabel 
+									<h:outputLabel style="font-size:13px;"
 										value="#{financa.tipoFinanca}" /><br/>
 									
 								</p:column>
 							</p:panelGrid>
+							</p:column>
+							
+							<p:column>
+							<p:panelGrid columns="1" >
+							
+								<p:fieldset id="tabCate1">
+									<p:outputLabel value="Saldo do Grupo #{financasMBean.categoria.nome}" style="margin-left:2%; width:70%;color:#2E8B57 !important;font-size:15px;"/>
+									<p:panelGrid  columns="2" >
+										<p:column>
+											<p:outputLabel style="font-size:12px;" value="Total de Créditos" />
+										</p:column>
+										<p:column>
+											<p:outputLabel style="color:#006400; font-size:14px;"
+												value="#{financasMBean.creditos}" />
+										</p:column>
+										<p:column>
+											<p:outputLabel style="font-size:12px;" value="Total de Débitos" />
+										</p:column>
+										<p:column>
+											<p:outputLabel style="color:#ff0000; font-size:14px;"
+												value="#{financasMBean.debitos}" />
+										</p:column>
+										<p:column>
+											<p:outputLabel style="font-size:12px;" value="Saldo Total" />
+										</p:column>
+										<p:column>
+											<p:outputLabel rendered="#{financasMBean.saldo gt 0}"
+												style="color:#2E8B57;font-size:15px;"
+												value="#{financasMBean.saldo}" />
+											<p:outputLabel rendered="#{financasMBean.saldo lt 0}"
+												style="color:#ff0000;font-size:15px;"
+												value="#{financasMBean.saldo}" />
+										</p:column>
+									</p:panelGrid>
+								</p:fieldset>
+								
+						</p:panelGrid>
+							</p:column>
+							</p:panelGrid>
 						</p:tab>
+						
+						
 					</p:tabView>
 						</p:fieldset>
 
-				<p:fieldset id="tabCate1"  style="width:50%;" legend="Saldo do Grupo #{financasMBean.categoria.nome}">
-					<p:panelGrid  columns="2"
-						>
-						<p:column>
-							<p:outputLabel style="font-size:12px;" value="Total de Créditos" />
-						</p:column>
-						<p:column>
-							<p:outputLabel style="color:#006400; font-size:14px;"
-								value="#{financasMBean.creditos}" />
-						</p:column>
-						<p:column>
-							<p:outputLabel style="font-size:12px;" value="Total de Débitos" />
-						</p:column>
-						<p:column>
-							<p:outputLabel style="color:#ff0000; font-size:14px;"
-								value="#{financasMBean.debitos}" />
-						</p:column>
-						<p:column>
-							<p:outputLabel style="font-size:12px;" value="Saldo Total" />
-						</p:column>
-						<p:column>
-							<p:outputLabel rendered="#{financasMBean.saldo gt 0}"
-								style="color:#2E8B57;font-size:15px;"
-								value="#{financasMBean.saldo}" />
-							<p:outputLabel rendered="#{financasMBean.saldo lt 0}"
-								style="color:#ff0000;font-size:15px;"
-								value="#{financasMBean.saldo}" />
-						</p:column>
-					</p:panelGrid>
-				<p:panelGrid columns="1">
-					<p:column>
-						<h:commandLink id="excel">
-						<h:graphicImage library="imagens" name="logo_xls.gif"/>
-							<p:dataExporter type="xls" target="pList" fileName="financas"
-								postProcessor="#{financasMBean.postProcessXLS}" />
-						</h:commandLink>
-					<h:commandLink id="pdf">
-					<h:graphicImage library="imagens" name="logo_pdf.gif"/>
-						<p:dataExporter type="pdf" target="pList" fileName="financas"
-							preProcessor="#{financasMBean.preProcessPDF}" />
-					</h:commandLink>
-					</p:column>
-				</p:panelGrid>
-				</p:fieldset>
+			
 				</p:fieldset>
 			</p:tab>
+			<p:tab title="Relatórios">
+			<p:panelGrid columns="2" style="width:50%;">
+				<p:column>
+					<h:outputLabel value="Grupo da Finança" />
+				</p:column>
+					<p:column>
+						<p:selectOneMenu value="#{financasMBean.categoria.id}">
+							<f:selectItem itemLabel="Todas Finanças" />
+							<f:selectItems value="#{financasMBean.categoriaList}" var="cate"
+								itemLabel="#{cate.nome}" itemValue="#{cate.id}" />
+							<p:ajax listener="#{financasMBean.carregarFinancasPorCate()}"
+								event="change" update="relFin" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:panelGrid>
+						
+					<p:fieldset id="fRel" legend="Finanças">
+						<p:dataTable  id="relFin" value="#{financasMBean.financas}"
+							var="financaRel" rows="5" style="width:150%;" paginator="true"
+							paginatorPosition="bottom">
+						
+				 
+							
+							<p:column headerText="Nome" sortBy="#{financaRel.nome}"	style="width:46%;">
+										<p:outputLabel value="#{financaRel.nome}" style="width:100%;"/>
+							</p:column>
+							
+							<p:column headerText="Vencimento" style="width:8%;">
+								<p:outputLabel style="margin-left:8%;"
+									value="#{financaRel.dataVencimento}" disabled="true">
+									<f:converter converterId="dateConverter" />
+								</p:outputLabel>
+							</p:column>
+							<p:column headerText="Valor" sortBy="#{financaRel.valor}"
+							style="width:6%;">
+							
+									<p:outputLabel style="margin-left:10%;"
+										value="#{financaRel.valor}" />
+							
+							</p:column>
+							<p:column headerText="Tipo" sortBy="#{financaRel.tipoFinanca}"
+							style="width:7%;">
+							
+									<p:outputLabel style="margin-left:8%;"
+										value="#{financaRel.tipoFinanca}" />
+								</p:column>
+					</p:dataTable>
+					</p:fieldset>
+							
+							<p:panelGrid columns="2" style="width:15%;">
+									<p:column style="width:12%;">
+										<h:commandLink id="excel" title="Gerar Relatório em Excel">
+										<h:graphicImage library="imagens" name="botao_xls.png"/>
+											<p:dataExporter type="xls" target="relFin" fileName="financas" postProcessor="#{financasMBean.postProcessXLS}"/>
+										</h:commandLink>
+									</p:column>
+									<p:column style="width:12%;">
+									<h:commandLink id="pdf" title="Gerar Relatório em PDF">
+									<h:graphicImage library="imagens" name="botao_pdf.png"/>
+											<p:dataExporter type="pdf" target="relFin" fileName="financas" preProcessor="#{financasMBean.preProcessPDF}"/>
+									</h:commandLink>
+									</p:column>
+								</p:panelGrid>
+						</p:tab>
 		</p:tabView>
+	
 	</ui:define>
 </ui:composition>
