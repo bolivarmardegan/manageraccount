@@ -1,7 +1,10 @@
 package br.com.controlefinanceiro.beans;
 
+import java.awt.Point;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -31,10 +34,20 @@ import org.primefaces.event.RowEditEvent;
 import org.primefaces.model.TreeNode;
 
 import com.lowagie.text.BadElementException;
+import com.lowagie.text.DocListener;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
+import com.lowagie.text.HeaderFooter;
 import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Rectangle;
+import com.lowagie.text.Table;
+import com.lowagie.text.pdf.PdfCell;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
 
 import br.com.controlefinanceiro.Helper.CriadroDeArvoresHelper;
 import br.com.controlefinanceiro.Helper.UsuarioSessionControler;
@@ -117,27 +130,24 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 	public void salvar() {
 		if (garantirAnoCoerente(this.financa)) {
 			this.conferirData();
-			if (this.categoria.getId() == null) {
-				this.categoria.setIdUsuario(this.usuSession.getUsuarioLogado().getId());
-				CategoriaFinanca categoriaPorNome = this.categoriaDAO.buscarCategoriaPorNome(this.categoria.getNome(), this.usuSession.getUsuarioLogado());
-				if(categoriaPorNome == null){
-					this.categoriaDelegate.simplesInsert(this.categoria);
+			CategoriaFinanca cateEx = this.categoriaDAO.buscarCategoriaPorNome(this.categoria.getNome(), this.usuSession.getUsuarioLogado());
+			if(cateEx == null){
+					CategoriaFinanca cate = new CategoriaFinanca();
+					cate.setNome(this.categoria.getNome());
+					cate.setIdUsuario(this.usuSession.getUsuarioLogado().getId());
+					this.categoriaDelegate.simplesInsert(cate);
+					this.categoriaList = new ArrayList<CategoriaFinanca>();
 					this.categoriaList = this.categoriaDAO.buscarCategoriasDoUsuario(this.usuSession.getUsuarioLogado());
-					CategoriaFinanca categoriaNome = this.categoriaDAO.buscarCategoriaPorNome(this.categoria.getNome(), this.usuSession.getUsuarioLogado());
-					this.categoria = categoriaNome;
-					
-				}else
-					this.categoria = categoriaPorNome;
+					cateEx = this.categoriaDAO.buscarCategoriaPorNome(this.categoria.getNome(), this.usuSession.getUsuarioLogado());
 			}
-//			CategoriaFinanca cate = this.categoriaDAO.buscarCategoriaPorNome(this.categoria.getNome(),
-//					this.usuSession.getUsuarioLogado());
 			this.financa.setIdUsuario(this.usuSession.getUsuarioLogado().getId());
-			this.financa.setCategoriaFinanca(this.categoria);
+			this.financa.setCategoriaFinanca(cateEx);
 			this.financaDelegate.inserir(this.financa);
-			this.categoriaList = this.categoriaDAO.buscarCategoriasDoUsuario(this.usuSession.getUsuarioLogado());
 			this.setFluxoDePagina(Constants.INCLUSAO);
 			this.financas = new ArrayList<>();
-			this.financas = this.financaDAO.buscarFinancasPorCategoria(this.categoria, this.usuSession.getUsuarioLogado());
+			this.financas = this.financaDAO.buscarFinancasPorCategoria(cateEx, this.usuSession.getUsuarioLogado());
+			this.categoriaList = new ArrayList<CategoriaFinanca>();
+			this.categoriaList = this.categoriaDAO.buscarCategoriasDoUsuario(usuSession.getUsuarioLogado());
 			this.gerarSaldo();
 			this.financa = new Financa();
 		} else {
@@ -298,25 +308,65 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 	        }
 	    }
 	     
-	    public void preProcessPDF(Object document) throws IOException, BadElementException, DocumentException {
-	        Document pdf = (Document) document;
-	        pdf.open();
-	        pdf.setPageSize(PageSize.A4);
-	        
-	        
-	        
-	        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-	        externalContext.getApplicationMap();
-	        //pdf.add(arg0)
-	        String logo = externalContext.getRealPath("") + File.separator + "resources" + File.separator + "imagens" +  File.separator + "logo_manageraccount.png";
+	    public void preProcessPDF() throws IOException, BadElementException, DocumentException {
+	       Document pdf = new Document();
+	       
+	       PdfWriter.getInstance(pdf, new FileOutputStream("C:\\arquivos\\financas_"+this.categoria.getNome().toLowerCase()+"_"+this.usuSession.getUsuarioLogado().getNome().toLowerCase()+".pdf"));
+	          pdf.open();
+	          pdf.addKeywords("www.manageraccount.com.br");
+	          pdf.addAuthor("©ManagerAccount");
+	          
+	          ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+	          String logo = externalContext.getRealPath("") + File.separator + "resources" + File.separator + "imagens" +  File.separator + "logo_manageraccount.png";
+	          pdf.add(Image.getInstance(logo));
 	         
-	        pdf.add(Image.getInstance(logo));
+	          PdfPTable table = new PdfPTable(new float[]{0.4f, 0.22f, 0.19f, 0.19f});
+	          PdfPCell header = new PdfPCell(new Paragraph("Finanças da Categoria "+this.categoria.getNome()));
+	          header.setColspan(4);
+	          table.addCell(header);
+
+	          PdfPTable tableSaldo = new PdfPTable(new float[]{0.3f, 0.3f});
+	          PdfPCell headerSaldo = new PdfPCell(new Paragraph("Saldo da Categoria "+this.categoria.getNome()));
+	          headerSaldo.setColspan(2);
+	          tableSaldo.addCell(headerSaldo);
+	          
+	          table.addCell("NOME");
+	          table.addCell("VENCIMENTO");
+	          table.addCell("VALOR");
+	          table.addCell("TIPO");
+	          for (Financa categoriaFinanca : this.financas) {
+	        	  table.addCell(categoriaFinanca.getNome());
+	        	  table.addCell(categoriaFinanca.getDataVencimento().getTime().toString());
+	        	  table.addCell(categoriaFinanca.getValor().toString());
+	        	  table.addCell(categoriaFinanca.getTipoFinanca());
+	          }
+	          pdf.add(table);
+	          
+	          // adicionando um parágrafo ao documento
+		        
+	          tableSaldo.addCell("Total de Débitos");
+	          tableSaldo.addCell(String.valueOf(debitos));
+	          tableSaldo.addCell("Total de Créditos");
+	          tableSaldo.addCell(String.valueOf(creditos));
+	          tableSaldo.addCell("Saldo");
+	          tableSaldo.addCell(String.valueOf(saldo));
+	          pdf.add(tableSaldo);
+	          pdf.close();
+	       
 	        
-	        pdf.addHeader("Total de Débitos",String.valueOf(debitos));
-	        pdf.addHeader("Total de Créditos",String.valueOf(creditos));
-	        pdf.addHeader("Saldo: ",String.valueOf(saldo));
-	        
-	        
+	    }
+	    
+	    public void excluirCategoria(){
+	    	List<Financa> buscarFinancasPorCategoria = this.financaDAO.buscarFinancasPorCategoria(this.categoria, this.usuSession.getUsuarioLogado());
+	    	for (Financa financa : buscarFinancasPorCategoria) {
+				financaDAO.deletar(financa);
+			}
+	    	this.categoriaDAO.deletar(this.categoria);
+	    	this.categoria = new CategoriaFinanca();
+	    	this.financas = new ArrayList<Financa>();
+	    	this.financas = this.financaDAO.buscarFinancasDoUsuario(this.usuSession.getUsuarioLogado());
+	    	this.categoriaList = new ArrayList<>();
+	    	this.categoriaList = this.categoriaDAO.buscarCategoriasDoUsuario(this.usuSession.getUsuarioLogado());
 	    }
 	
 	

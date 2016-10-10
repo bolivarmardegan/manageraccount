@@ -8,7 +8,6 @@
 	template="/WEB-INF/template/template_principal.xhtml">
 	<ui:define name="conteudo">
 		<!-- MENSAGEM DE AJUDA -->
-	
 		<p:tabView>
 			<p:tab title="Nova Finança">
 				<p:fieldset style="width:155%;" id="fieldFin">
@@ -24,7 +23,7 @@
 										value="#{financasMBean.categoria.id}">
 										<f:selectItem itemLabel="Grupo" />
 										<f:selectItems value="#{financasMBean.categoriaList}"
-											var="cate" itemLabel="#{cate.nome}" itemValue="#{cate.id}" />
+											var="catego" itemLabel="#{catego.nome}" itemValue="#{catego.id}"/>
 										<p:ajax
 											listener="#{financasMBean.carregarFinancasPorCategoriaInclude()}"
 											event="change" update="panelFin, panelBtn" />
@@ -98,7 +97,7 @@
 										</p:commandButton>
 										<p:commandButton title="Salvar" icon="ui-icon-plus"
 											action="#{financasMBean.salvar()}"
-											update="tabDados,panelFin, tabFinancas" />
+											update="tabDados,panelFin, tabFinancas, @form" />
 									</p:column>
 								</p:panelGrid>
 							</p:fieldset>
@@ -165,13 +164,37 @@
 						</p:column>
 						<p:column style="width:4%;">
 							<p:commandButton icon="fa fa-fw fa-trash">
+							<p:confirm header="Confirmação" message="Deseja realmente excluir a Finança #{financa.nome} ?" icon="ui-icon-alert" />
 								<p:ajax update="tabFinancas"
 									listener="#{financasMBean.tirarDaLista(financa)}" event="click" />
 							</p:commandButton>
+							<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" >
+							       <p:commandButton  value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							       <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+							</p:confirmDialog>
 						</p:column>
 						</p:dataTable>
 					</p:fieldset>
-
+				</p:fieldset>
+			</p:tab>
+			<p:tab title="Meus Grupos" id="tabGrp">
+				<p:fieldset style="width:155%;" id="fieldGrp">
+								<p:dataTable id="cates" value="#{financasMBean.categoriaList}" var="cat" paginator="true" rows="10"
+								style="width:100%;"	paginatorPosition="bottom">
+									<p:column headerText="Nome da Categoria" style="width:50%;">
+										<p:outputLabel value="#{cat.nome}"/>
+									</p:column>
+									<p:column  style="width:3%;">
+										<p:commandButton icon="fa fa-fw fa-trash-o" action="#{financasMBean.excluirCategoria()}" update="@form">
+										 	<p:confirm header="Confirmação" message="Todas as Finanças do Grupo #{cat.nome} serão eliminadas. Confirma a exclusão?" icon="ui-icon-alert" />
+											<f:setPropertyActionListener value="#{cat.id}" target="#{financasMBean.categoria.id}"/>
+										</p:commandButton>
+										<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" >
+									        <p:commandButton  value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+									        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+									    </p:confirmDialog>
+									</p:column>
+								</p:dataTable>
 				</p:fieldset>
 			</p:tab>
 			<p:tab title="Saldo"  id="tabsaldo" >
@@ -290,18 +313,13 @@
 						</p:selectOneMenu>
 					</p:column>
 				</p:panelGrid>
-						
 					<p:fieldset id="fRel" legend="Finanças">
 						<p:dataTable  id="relFin" value="#{financasMBean.financas}"
 							var="financaRel" rows="5" style="width:150%;" paginator="true"
 							paginatorPosition="bottom">
-						
-				 
-							
 							<p:column headerText="Nome" sortBy="#{financaRel.nome}"	style="width:46%;">
 										<p:outputLabel value="#{financaRel.nome}" style="width:100%;"/>
 							</p:column>
-							
 							<p:column headerText="Vencimento" style="width:8%;">
 								<p:outputLabel style="margin-left:8%;"
 									value="#{financaRel.dataVencimento}" disabled="true">
@@ -310,36 +328,30 @@
 							</p:column>
 							<p:column headerText="Valor" sortBy="#{financaRel.valor}"
 							style="width:6%;">
-							
 									<p:outputLabel style="margin-left:10%;"
 										value="#{financaRel.valor}" />
-							
 							</p:column>
 							<p:column headerText="Tipo" sortBy="#{financaRel.tipoFinanca}"
 							style="width:7%;">
-							
 									<p:outputLabel style="margin-left:8%;"
 										value="#{financaRel.tipoFinanca}" />
 								</p:column>
 					</p:dataTable>
 					</p:fieldset>
-							
 							<p:panelGrid columns="2" style="width:15%;">
 									<p:column style="width:12%;">
 										<h:commandLink id="excel" title="Gerar Relatório em Excel">
-										<h:graphicImage library="imagens" name="botao_xls.png"/>
+										<h:graphicImage library="imagens" name="excel_mac.png"/>
 											<p:dataExporter type="xls" target="relFin" fileName="financas" postProcessor="#{financasMBean.postProcessXLS}"/>
 										</h:commandLink>
 									</p:column>
 									<p:column style="width:12%;">
-									<h:commandLink id="pdf" title="Gerar Relatório em PDF">
-									<h:graphicImage library="imagens" name="botao_pdf.png"/>
-											<p:dataExporter type="pdf" target="relFin" fileName="financas" preProcessor="#{financasMBean.preProcessPDF}"/>
+									<h:commandLink id="pdf" title="Gerar Relatório em PDF" actionListener="#{financasMBean.preProcessPDF}">
+										<h:graphicImage library="imagens" name="pdf_redu.png"/>
 									</h:commandLink>
 									</p:column>
-								</p:panelGrid>
+						</p:panelGrid>
 						</p:tab>
 		</p:tabView>
-	
 	</ui:define>
 </ui:composition>
