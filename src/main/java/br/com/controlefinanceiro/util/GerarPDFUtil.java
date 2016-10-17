@@ -53,7 +53,7 @@ public class GerarPDFUtil {
           pdf.open();
           pdf.addKeywords("www.manageraccount.com.br");
           pdf.addAuthor("©ManagerAccount");
-          String logo = externalContext.getRealPath("") + File.separator + "resources" + File.separator + "imagens" +  File.separator + "logo_relatorio.jpg";
+          String logo = externalContext.getRealPath("") + File.separator + "resources" + File.separator + "imagens" +  File.separator + "logo_manager_relatorio.png";
           Image image = Image.getInstance(logo);
           image.setAlignment(Image.ALIGN_CENTER | Image.TEXTWRAP);
           pdf.add(image);

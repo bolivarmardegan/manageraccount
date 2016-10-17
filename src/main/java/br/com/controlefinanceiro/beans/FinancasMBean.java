@@ -408,10 +408,10 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 	    		
 	    		/** Ligando a figura ao Workbook**/
 		    	byte data[] = new byte[8000]; // o suficiente para caber a figura
-		    	new DataInputStream(new FileInputStream(externalContext.getRealPath("") + File.separator + "resources" + File.separator + "imagens" +  File.separator + "logo_relatorio.jpg")).read(data);
+		    	new DataInputStream(new FileInputStream(externalContext.getRealPath("") + File.separator + "resources" + File.separator + "imagens" +  File.separator + "logo_manager.jpg")).read(data);
 		    	int index = workbook.addPicture(data, HSSFWorkbook.PICTURE_TYPE_JPEG);
 		    	/*Ligando a figura ao Sheet*/
-		    	HSSFClientAnchor anchor = new HSSFClientAnchor(0, 0, 0, 0,(short) 5, 1, (short) (5 + 2), 5);
+		    	HSSFClientAnchor anchor = new HSSFClientAnchor(0, 0, 0, 0,(short) 5, 1, (short) (5 + 1), 5);
 		    	firstSheet.createDrawingPatriarch().createPicture(anchor, index);
 		    	
 	    		
