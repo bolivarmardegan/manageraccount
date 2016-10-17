@@ -1,19 +1,28 @@
 package br.com.controlefinanceiro.beans;
 
+import java.awt.Color;
 import java.awt.Point;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -22,15 +31,24 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.jws.soap.SOAPBinding.Style;
+import javax.swing.plaf.metal.MetalIconFactory.FolderIcon16;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFPatriarch;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.FontFamily;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.event.RowEditEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.TreeNode;
 
 import com.lowagie.text.BadElementException;
@@ -38,12 +56,15 @@ import com.lowagie.text.DocListener;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
+import com.lowagie.text.Font;
 import com.lowagie.text.HeaderFooter;
 import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Rectangle;
 import com.lowagie.text.Table;
+import com.lowagie.text.html.simpleparser.StyleSheet;
+import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfCell;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
@@ -61,7 +82,9 @@ import br.com.controlefinanceiro.delegate.TipoFinancaDelegate;
 import br.com.controlefinanceiro.model.CategoriaFinanca;
 import br.com.controlefinanceiro.model.Financa;
 import br.com.controlefinanceiro.model.TipoFinanca;
+import br.com.controlefinanceiro.model.Usuario;
 import br.com.controlefinanceiro.util.Constants;
+import br.com.controlefinanceiro.util.GerarPDFUtil;
 
 @Named
 @SessionScoped
@@ -106,6 +129,11 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 	private TreeNode root;
 	@Inject
 	private CriadroDeArvoresHelper criadorTable;
+	private StreamedContent arquivo;
+	private StreamedContent arquivoXLS;
+	@Inject
+	private GerarPDFUtil geradorPDF;
+	
 
 	@Override
 	public AbstractDelegate<Financa> getDelegateInstance() {
@@ -241,7 +269,7 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 				this.setDebitos(this.getDebitos().add(fin.getValor()));
 			}
 		}
-		this.setSaldo(this.getCreditos().subtract(this.getDebitos()));
+		this.setSaldo(this.creditos.subtract(this.debitos));
 	}
 
 	public void conferirData() {
@@ -287,73 +315,14 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 
 	}
 	
-	 public void postProcessXLS(Object document) {
-	        HSSFWorkbook wb = (HSSFWorkbook) document;
-	        HSSFSheet sheet = wb.getSheetAt(0);
-	        HSSFRow header = sheet.getRow(0);
-	         
-	        sheet.setHorizontallyCenter(true);
-	       
-	        
-	        HSSFCellStyle cellStyle = wb.createCellStyle();  
-	        cellStyle.setFillForegroundColor(HSSFColor.GREEN.index);
-	        cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-	        
-	        
-	        
-	        for(int i=0; i < header.getPhysicalNumberOfCells();i++) {
-	            HSSFCell cell = header.getCell(i);
-	             
-	            cell.setCellStyle(cellStyle);
-	        }
-	    }
-	     
-	    public void preProcessPDF() throws IOException, BadElementException, DocumentException {
-	       Document pdf = new Document();
-	       
-	       PdfWriter.getInstance(pdf, new FileOutputStream("C:\\arquivos\\financas_"+this.categoria.getNome().toLowerCase()+"_"+this.usuSession.getUsuarioLogado().getNome().toLowerCase()+".pdf"));
-	          pdf.open();
-	          pdf.addKeywords("www.manageraccount.com.br");
-	          pdf.addAuthor("©ManagerAccount");
-	          
-	          ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-	          String logo = externalContext.getRealPath("") + File.separator + "resources" + File.separator + "imagens" +  File.separator + "logo_manageraccount.png";
-	          pdf.add(Image.getInstance(logo));
-	         
-	          PdfPTable table = new PdfPTable(new float[]{0.4f, 0.22f, 0.19f, 0.19f});
-	          PdfPCell header = new PdfPCell(new Paragraph("Finanças da Categoria "+this.categoria.getNome()));
-	          header.setColspan(4);
-	          table.addCell(header);
-
-	          PdfPTable tableSaldo = new PdfPTable(new float[]{0.3f, 0.3f});
-	          PdfPCell headerSaldo = new PdfPCell(new Paragraph("Saldo da Categoria "+this.categoria.getNome()));
-	          headerSaldo.setColspan(2);
-	          tableSaldo.addCell(headerSaldo);
-	          
-	          table.addCell("NOME");
-	          table.addCell("VENCIMENTO");
-	          table.addCell("VALOR");
-	          table.addCell("TIPO");
-	          for (Financa categoriaFinanca : this.financas) {
-	        	  table.addCell(categoriaFinanca.getNome());
-	        	  table.addCell(categoriaFinanca.getDataVencimento().getTime().toString());
-	        	  table.addCell(categoriaFinanca.getValor().toString());
-	        	  table.addCell(categoriaFinanca.getTipoFinanca());
-	          }
-	          pdf.add(table);
-	          
-	          // adicionando um parágrafo ao documento
-		        
-	          tableSaldo.addCell("Total de Débitos");
-	          tableSaldo.addCell(String.valueOf(debitos));
-	          tableSaldo.addCell("Total de Créditos");
-	          tableSaldo.addCell(String.valueOf(creditos));
-	          tableSaldo.addCell("Saldo");
-	          tableSaldo.addCell(String.valueOf(saldo));
-	          pdf.add(tableSaldo);
-	          pdf.close();
-	       
-	        
+	    public StreamedContent  getArquivo()  {
+	    	try {
+				return this.geradorPDF.geradorPDF(categoria, this.usuSession.getUsuarioLogado(), financas, debitos, creditos, saldo);
+			} catch (IOException | DocumentException e) {
+				System.out.println("Erro ao gerar PDF: "+e);
+				e.printStackTrace();
+			}
+	    	return null;
 	    }
 	    
 	    public void excluirCategoria(){
@@ -369,7 +338,166 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 	    	this.categoriaList = this.categoriaDAO.buscarCategoriasDoUsuario(this.usuSession.getUsuarioLogado());
 	    }
 	
+	    public StreamedContent getArquivoXLS() {
+
+	    	HSSFWorkbook workbook = new HSSFWorkbook();
+	    	HSSFSheet firstSheet = workbook.createSheet("FINANÇAS DO TIPO "+this.categoria.getNome());
+	    	HSSFRow row = firstSheet.createRow(7);
+	    	
+	    	HSSFCellStyle cellStyle = workbook.createCellStyle();  
+	        cellStyle.setFillForegroundColor(HSSFColor.BLUE.index);
+	        cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+	        
+	        HSSFCellStyle cellStyleHeader = workbook.createCellStyle();  
+	        cellStyleHeader.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
+	        cellStyleHeader.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+	    	
+	        HSSFFont fonte = workbook.createFont();
+            fonte.setFontHeightInPoints((short)12);
+            fonte.setItalic(true);
+            
+            cellStyleHeader.setFont(fonte);
+	        
+	    	row.createCell(4).setCellValue("USUÁRIO");
+	    	row.getCell(4).setCellStyle(cellStyleHeader);
+	    	row.createCell(5).setCellValue("DATA/ RELATÓRIO");
+	    	row.getCell(5).setCellStyle(cellStyleHeader);
+	    	row.createCell(6).setCellValue("MAIOR DÉBITO");
+	    	row.getCell(6).setCellStyle(cellStyleHeader);
+	    	row.createCell(7).setCellValue("MAIOR CRÉDITO");
+	    	row.getCell(7).setCellStyle(cellStyleHeader);
+	    	
+	    	HSSFRow row1 = firstSheet.createRow(8);
+	    	LocalDate dataAtual = LocalDate.now();
+	    	BigDecimal gerarMaiorCredito = this.gerarMaiorCredito(financas);
+	    	BigDecimal gerarMaiorDebito = this.gerarMaiorDebito(financas);
+	    	row1.createCell(4).setCellValue(this.usuSession.getUsuarioLogado().getNome()+" "+this.usuSession.getUsuarioLogado().getSobrenome());
+	    	row1.getCell(4).setCellStyle(cellStyleHeader);
+	    	row1.createCell(5).setCellValue(dataAtual.toString());
+	    	row1.getCell(5).setCellStyle(cellStyleHeader);
+	    	row1.createCell(6).setCellValue(gerarMaiorDebito.toString());
+	    	row1.getCell(6).setCellStyle(cellStyleHeader);
+	    	row1.createCell(7).setCellValue(gerarMaiorCredito.toString());
+	    	row1.getCell(7).setCellStyle(cellStyleHeader);
+	    	
+	    	HSSFRow row2 = firstSheet.createRow(9);
+	    	
+	    	
+	    	HSSFRow row4HeaderTabela = firstSheet.createRow(10);
+	    	row4HeaderTabela.createCell(4).setCellValue("FINANÇA");
+	    	row4HeaderTabela.getCell(4).setCellStyle(cellStyle);
+	    	row4HeaderTabela.createCell(5).setCellValue("DATA/ VENCIMENTO");
+	    	row4HeaderTabela.getCell(5).setCellStyle(cellStyle);
+	    	row4HeaderTabela.createCell(6).setCellValue("VALOR");
+	    	row4HeaderTabela.getCell(6).setCellStyle(cellStyle);
+	    	row4HeaderTabela.createCell(7).setCellValue("TIPO");
+	    	row4HeaderTabela.getCell(7).setCellStyle(cellStyle);
+	    	
+	    	firstSheet.setColumnWidth((short) (4), (short) (10 * 700));
+			firstSheet.setColumnWidth((short) (5), (short) (10 * 700));
+			firstSheet.setColumnWidth((short) (6), (short) (10 * 700));
+			firstSheet.setColumnWidth((short) (7), (short) (10 * 700));
+	    	
+	    	FileOutputStream file = null;
+
+	    	try {
+	    		
+	    		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+	        	//this.cleanDirectory(externalContext, categoria, usuario);
+	            //file =  new FileOutputStream(externalContext.getRealPath("") + File.separator + "resources" + File.separator + "processos" +  File.separator+"relatorio_"+categoria.getNome().toLowerCase()+"_"+this.usuSession.getUsuarioLogado().getNome().toLowerCase()+"_"+this.usuSession.getUsuarioLogado().getSobrenome().toLowerCase()+".xls");
+	    		
+	    		/** Ligando a figura ao Workbook**/
+		    	byte data[] = new byte[8000]; // o suficiente para caber a figura
+		    	new DataInputStream(new FileInputStream(externalContext.getRealPath("") + File.separator + "resources" + File.separator + "imagens" +  File.separator + "logo_relatorio.jpg")).read(data);
+		    	int index = workbook.addPicture(data, HSSFWorkbook.PICTURE_TYPE_JPEG);
+		    	/*Ligando a figura ao Sheet*/
+		    	HSSFClientAnchor anchor = new HSSFClientAnchor(0, 0, 0, 0,(short) 5, 1, (short) (5 + 2), 5);
+		    	firstSheet.createDrawingPatriarch().createPicture(anchor, index);
+		    	
+	    		
+	    		
+	    		
+	    		file = new FileOutputStream(new File(externalContext.getRealPath("") + File.separator + "resources" + File.separator + "processos" +  File.separator+"relatorio_"+categoria.getNome().toLowerCase()+"_"+this.usuSession.getUsuarioLogado().getNome().toLowerCase()+"_"+this.usuSession.getUsuarioLogado().getSobrenome().toLowerCase()+".xls"));
+	    		int linha = 11;
+	    		for (Financa financa: this.financas) {
+	    			HSSFRow linhaValue = firstSheet.createRow(linha);
+	    			linhaValue.createCell(4).setCellValue(financa.getNome());
+	    			Calendar calendar = financa.getDataVencimento();
+	          	  	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+	          	  	String dataString = simpleDateFormat.format(calendar.getTime());
+	          	  	linhaValue.createCell(5).setCellValue(dataString);
+	    			linhaValue.createCell(6).setCellValue(financa.getValor().toString());
+	    			linhaValue.createCell(7).setCellValue(financa.getTipoFinanca());
+	    			linha++;
+	    			
+	    		}
+	    		
+	    		HSSFRow linhaB2= firstSheet.createRow(linha);
+	    		
+	    		linha++;
+	    		HSSFRow linhaSaldo = firstSheet.createRow(linha);
+	    		firstSheet.addMergedRegion(new CellRangeAddress(linha,linha,4,7));
+	    		linhaSaldo.createCell(4).setCellValue("SALDO DA CATEGORIA "+this.categoria.getNome().toUpperCase());
+	    		linhaSaldo.getCell(4).setCellStyle(cellStyle);
+	    		
+	    		linha++;
+	    		HSSFRow linhaSaldo1 = firstSheet.createRow(linha);
+	    		linhaSaldo1.createCell(4).setCellValue("TOTAL DE DÉBITOS");
+	    		linhaSaldo1.getCell(4).setCellStyle(cellStyleHeader);
+	    		linhaSaldo1.createCell(5).setCellValue(this.debitos.toString());
+	    		linhaSaldo1.getCell(5).setCellStyle(cellStyleHeader);
+
+	    		linha++;
+	    		HSSFRow linhaSaldo2 = firstSheet.createRow(linha);
+	    		linhaSaldo2.createCell(4).setCellValue("TOTAL DE CRÉDITOS");
+	    		linhaSaldo2.getCell(4).setCellStyle(cellStyleHeader);
+	    		linhaSaldo2.createCell(5).setCellValue(this.creditos.toString());
+	    		linhaSaldo2.getCell(5).setCellStyle(cellStyleHeader);
+	    		
+	    		linha++;
+	    		HSSFRow linhaSaldo3 = firstSheet.createRow(linha);
+	    		linhaSaldo3.createCell(4).setCellValue("SALDO");
+	    		linhaSaldo3.getCell(4).setCellStyle(cellStyleHeader);
+	    		linhaSaldo3.createCell(5).setCellValue(this.saldo.toString());
+	    		linhaSaldo3.getCell(5).setCellStyle(cellStyleHeader);
+	    		
+	    		workbook.write(file);
+	    		file.close();
+	    		file.flush();
+	    		InputStream resourceAsStream = externalContext.getResourceAsStream("/resources/processos/"+"relatorio_"+categoria.getNome().toLowerCase()+"_"+this.usuSession.getUsuarioLogado().getNome().toLowerCase()+"_"+this.usuSession.getUsuarioLogado().getSobrenome().toLowerCase()+".xls");
+	    		this.arquivoXLS = new DefaultStreamedContent(resourceAsStream,"application/xls","relatorio_"+categoria.getNome().toLowerCase()+"_"+this.usuSession.getUsuarioLogado().getNome().toLowerCase()+"_"+this.usuSession.getUsuarioLogado().getSobrenome().toLowerCase()+".xls");
+	    		return arquivoXLS;  
+				
+	    	}catch (Exception e) {
+			}
+	    	return null;
+			
+	    }
 	
+	    
+	    public BigDecimal gerarMaiorDebito(List<Financa> financas){
+			 BigDecimal maiorDebito = new BigDecimal("0");
+			 for (Financa financa : financas) {
+				if(financa.getTipoFinanca().equals("DÉBITO")){
+					if(financa.getValor().compareTo(maiorDebito) == 1){
+						maiorDebito = financa.getValor();
+					}
+				}
+			}
+			 return maiorDebito;
+		 }
+		 
+		 public BigDecimal gerarMaiorCredito(List<Financa> financas){
+			 BigDecimal maiorCredito = new BigDecimal("0");
+			 for (Financa financa : financas) {
+				if(financa.getTipoFinanca().equals("CRÉDITO")){
+					if(financa.getValor().compareTo(maiorCredito) == 1){
+						maiorCredito = financa.getValor();
+					}
+				}
+			}
+			 return maiorCredito;
+		 }
 
 	public Financa getFinanca() {
 		return financa;
@@ -482,5 +610,8 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 	public void setRoot(TreeNode root) {
 		this.root = root;
 	}
+	
+	
+	
 
 }

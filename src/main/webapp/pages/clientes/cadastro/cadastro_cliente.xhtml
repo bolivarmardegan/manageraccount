@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/template/template_principal.xhtml">
+			<ui:define name="conteudo">
+			<p:fieldset legend="Dados Cadastrais" style="width:60%;">
+			                <p:panelGrid columns="6">
+				                <p:column>
+				                    <p:outputLabel value="Nome*"  />
+				                </p:column>
+				                <p:column>
+				                    <p:inputText required="true" validatorMessage="Nome obrigatório" value="#{usuarioSessionControler.usuarioLogado.nome}"  title="Nome"/>
+				                </p:column>
+								<p:column>
+				                    <p:outputLabel value="Sobrenome*" />
+								</p:column>
+								<p:column>
+				                    <p:inputText required="true" validatorMessage="Sobre obrigatório"  value="#{usuarioSessionControler.usuarioLogado.sobrenome}"  title="Sobrenome"/>
+								</p:column>			 
+								<p:column>
+				                   <p:outputLabel value="Email*" />
+								</p:column>
+								<p:column>
+				                    <p:inputText id="email" required="true" validatorMessage="Email obrigatório" value="#{usuarioSessionControler.usuarioLogado.email}">
+				                    	
+				                    </p:inputText>
+								</p:column>	
+
+								<p:column>
+						           	<p:outputLabel value="Login*" />
+								</p:column>
+								<p:column >
+							    	<p:inputText id="loginIn" required="true" validatorMessage="Login obrigatório" value="#{usuarioSessionControler.usuarioLogado.login}">
+							    		<p:ajax listener="#{usuarioMBean.validarLoginCadastro()}" event="change" update="loginIn, messages"/>
+							    	</p:inputText>
+								</p:column>
+								<p:column>
+					            	<p:outputLabel value="Senha*" />
+	 							</p:column>
+	 							<p:column>
+				                	<p:password  required="true" validatorMessage="Senha obrigatória" value="#{usuarioSessionControler.usuarioLogado.senha}" />
+	 							</p:column>
+			               
+			               </p:panelGrid>
+			   </p:fieldset>
+				           <h:panelGrid  style="width:8%;" columns="2">
+				                <p:column>
+						            <p:commandButton  title="Confirmar Cadastramento" icon="fa fa-fw fa-floppy-o" action="#{usuarioMBean.alterar()}">
+						            <p:confirm header="Confirmação" message="#{usuarioSessionControler.usuarioLogado.nome}, deseja realmente alterar seus dados?" icon="ui-icon-alert" />
+						            	<f:setPropertyActionListener value="#{usuarioSessionControler.usuarioLogado}" target="#{usuarioMBean.usuario}"/>
+						            </p:commandButton>
+						            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" >
+									       <p:commandButton  value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+									       <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+									</p:confirmDialog>
+				            	</p:column>
+				            	 <p:column>
+						            <p:commandButton  title="Cancelar Cadastramento" icon="fa fa-fw fa-close" action="#{usuarioMBean.cancelarUpdate()}" process="@this"/>
+				            	</p:column>
+				           </h:panelGrid>
+			</ui:define>
+	</ui:composition>

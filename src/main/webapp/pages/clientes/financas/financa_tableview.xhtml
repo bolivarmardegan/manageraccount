@@ -340,15 +340,16 @@
 					</p:fieldset>
 							<p:panelGrid columns="2" style="width:15%;">
 									<p:column style="width:12%;">
-										<h:commandLink id="excel" title="Gerar Relatório em Excel">
+										<h:commandLink  id="excel" title="Gerar Relatório em Excel">
 										<h:graphicImage library="imagens" name="excel_mac.png"/>
-											<p:dataExporter type="xls" target="relFin" fileName="financas" postProcessor="#{financasMBean.postProcessXLS}"/>
+											<p:fileDownload value="#{financasMBean.arquivoXLS}" />
 										</h:commandLink>
 									</p:column>
 									<p:column style="width:12%;">
-									<h:commandLink id="pdf" title="Gerar Relatório em PDF" actionListener="#{financasMBean.preProcessPDF}">
+									<p:commandLink ajax="false" id="pdf"  title="Gerar Relatório em PDF">
 										<h:graphicImage library="imagens" name="pdf_redu.png"/>
-									</h:commandLink>
+										<p:fileDownload value="#{financasMBean.arquivo}" />
+									</p:commandLink>
 									</p:column>
 						</p:panelGrid>
 						</p:tab>

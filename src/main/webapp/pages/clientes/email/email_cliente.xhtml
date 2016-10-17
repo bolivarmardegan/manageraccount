@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/template/template_principal.xhtml">
+			<ui:define name="conteudo">
+			<p:fieldset legend="FeedBack" style="width:60%;">
+			                <p:panelGrid columns="6">
+				                <p:column>
+				                    <p:outputLabel value="Titulo do Email*"  />
+				                </p:column>
+				                <p:column>
+				                    <p:inputText  value="#{emailMBean.email.titulo}"  title="Titulo" disabled="true"/>
+				                </p:column>
+								<p:column>
+				                    <p:outputLabel value="Email" />
+								</p:column>
+								<p:column>
+				                    <p:inputText disabled="true"   value="#{emailMBean.email.emailUsuario}"  title="email"/>
+								</p:column>
+							</p:panelGrid>
+							<p:panelGrid columns="1">			 
+								<p:column>
+				                   <p:outputLabel value="Mensagem" />
+								</p:column>
+								<p:column>
+				                    <p:inputTextarea rows="10" cols="60"  required="true" validatorMessage="Mensagem está em branco" value="#{emailMBean.email.mensagem}"/>
+								</p:column>	
+			               
+			               </p:panelGrid>
+			   </p:fieldset>
+				           <h:panelGrid  style="width:8%;" columns="2">
+				                <p:column>
+						            <p:commandButton  title="Confirmar Envio" icon="fa fa-fw fa-floppy-o" action="#{emailMBean.enviarEmail()}">
+						            <p:confirm header="Confirmar Envio" message="#{usuarioSessionControler.usuarioLogado.nome}, sua opinião é muito importatne para nós! Confirma o envio de sua mensagem?" icon="ui-icon-alert" />
+						            </p:commandButton>
+						            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" >
+									       <p:commandButton  value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+									       <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+									</p:confirmDialog>
+				            	</p:column>
+				            	 <p:column>
+						            <p:commandButton  title="Cancelar envio" icon="fa fa-fw fa-close" action="#{emailMBean.cancelar()}" process="@this"/>
+				            	</p:column>
+				           </h:panelGrid>
+			</ui:define>
+	</ui:composition>

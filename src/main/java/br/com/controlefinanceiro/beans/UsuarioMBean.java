@@ -88,15 +88,20 @@ public class UsuarioMBean extends AbstractManagedBean<Usuario> implements Serial
 	
 	public void salvar(){
 		try {
-			String senhaCriptografada = this.criptografador.convertStringToMd5(usuario.getSenha());
-			this.usuario.setSenha(senhaCriptografada);
-			this.usuario.setPerfil(this.perfilList.get(1));
-			this.planoList = this.planoDAO.buscarPlanoPorPerfil(this.usuario.getPerfil().getId());
-			this.usuario.setPlano(this.planoList.get(0));
-			this.usuario.setPermissoesUsuario(this.permissoesList.get(0));
-			this.usuarioDelegate.inserir(this.usuario);
-			this.usuario = new Usuario();
-			this.redirectToPage(PagesUrl.LOGIN.getUrl(), true);
+			
+			Usuario userIndisponivel = this.validarLoginCadastro();
+			if(userIndisponivel == null){
+				String senhaCriptografada = this.criptografador.convertStringToMd5(usuario.getSenha());
+				this.usuario.setSenha(senhaCriptografada);
+				this.usuario.setPerfil(this.perfilList.get(1));
+				this.planoList = this.planoDAO.buscarPlanoPorPerfil(this.usuario.getPerfil().getId());
+				this.usuario.setPlano(this.planoList.get(0));
+				this.usuario.setPermissoesUsuario(this.permissoesList.get(0));
+				this.usuarioDelegate.inserir(this.usuario);
+				this.usuario = new Usuario();
+				this.redirectToPage(PagesUrl.LOGIN.getUrl(), true);
+			}else
+				session.addMessageInfo("Login já está sendo utilizado.","");
 		} catch (Exception e) {
 			session.addMessageError("Erro ao cadastrar");
 		}
@@ -113,19 +118,27 @@ public class UsuarioMBean extends AbstractManagedBean<Usuario> implements Serial
 		this.setSolicitouNovaSenha(false);
 		this.redirectToPage(PagesUrl.LOGIN.getUrl(), true);
 	}
+	public void cancelarUpdate(){
+		this.usuario = new Usuario();
+		this.novaSenha = "";
+		this.setSolicitouNovaSenha(false);
+		this.redirectToPage(PagesUrl.INDEX.getUrl(), true);
+	}
 	
 	
 //	public String onFlowProcess(FlowEvent event) {
 //	    return event.getNewStep();
 //	}
 	
-	public void validarLoginCadastro(){
+	public Usuario validarLoginCadastro(){
 		
-		Usuario buscarUsuarioPorLogin = this.usuarioDAO.buscarUsuarioPorLogin(this.usuario.getLogin());
-		if(buscarUsuarioPorLogin != null){
+		Usuario userIndisponivel = this.usuarioDAO.buscarUsuarioPorLogin(this.usuario.getLogin());
+		if(userIndisponivel != null){
 			this.session.addMessageInfo("O login "+this.usuario.getLogin()+" está indisponível.", "");
 			this.usuario.setLogin("");
+			return userIndisponivel;
 		}
+		return null;
 	}
 
 	public void alterarSenha(){
@@ -152,6 +165,14 @@ public class UsuarioMBean extends AbstractManagedBean<Usuario> implements Serial
 			this.session.addMessageError("Email ou Login inválidos!","");
 		}
 		
+	}
+	
+	public void alterar(){
+		String senhaCript = this.criptografador.convertStringToMd5(this.usuario.getSenha());
+		this.usuario.setSenha(senhaCript);
+		this.usuarioDelegate.alterar(this.usuario);
+		this.usuario = new Usuario();
+		this.redirectToPage(PagesUrl.INDEX.getUrl(), true);
 	}
 
 	
