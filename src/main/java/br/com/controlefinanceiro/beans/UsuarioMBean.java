@@ -86,25 +86,28 @@ public class UsuarioMBean extends AbstractManagedBean<Usuario> implements Serial
 		this.solicitouNovaSenha = false;
 	}
 	
+	
+	
 	public void salvar(){
 		try {
-			
-			Usuario userIndisponivel = this.validarLoginCadastro();
-			if(userIndisponivel == null){
-				String senhaCriptografada = this.criptografador.convertStringToMd5(usuario.getSenha());
-				this.usuario.setSenha(senhaCriptografada);
-				this.usuario.setPerfil(this.perfilList.get(1));
-				this.planoList = this.planoDAO.buscarPlanoPorPerfil(this.usuario.getPerfil().getId());
-				this.usuario.setPlano(this.planoList.get(0));
-				this.usuario.setPermissoesUsuario(this.permissoesList.get(0));
-				this.usuarioDelegate.inserir(this.usuario);
-				this.usuario = new Usuario();
-				this.redirectToPage(PagesUrl.LOGIN.getUrl(), true);
-			}else
-				session.addMessageInfo("Login já está sendo utilizado.","");
+				Usuario userIndisponivel = this.validarLoginCadastro();
+				if(userIndisponivel == null){
+					String senhaCriptografada = this.criptografador.convertStringToMd5(usuario.getSenha());
+					this.usuario.setSenha(senhaCriptografada);
+					this.usuario.setPerfil(this.perfilList.get(1));
+					this.planoList = this.planoDAO.buscarPlanoPorPerfil(this.usuario.getPerfil().getId());
+					this.usuario.setPlano(this.planoList.get(0));
+					this.usuario.setPermissoesUsuario(this.permissoesList.get(0));
+					this.usuarioDelegate.inserir(this.usuario);
+					this.usuario = new Usuario();
+					this.redirectToPage(PagesUrl.LOGIN.getUrl(), true);
+				}else
+					session.addMessageInfo("Login já está sendo utilizado.","");
 		} catch (Exception e) {
 			session.addMessageError("Erro ao cadastrar");
 		}
+			
+		
 	}
 	
 	public void carregarPlanoPorPerfil(){

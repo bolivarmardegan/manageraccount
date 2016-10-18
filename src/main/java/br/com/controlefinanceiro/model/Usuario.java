@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.jboss.logging.annotations.Message;
 
 @Entity
 @Table(name="tabela008_usuario")
@@ -28,10 +29,13 @@ public class Usuario implements Serializable{
 	@Column(name="ID_USUARIO")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer Id;
+	@NotEmpty(message="Nome obrigatório.")
 	@Column(name="NOME_USUARIO")
 	private String nome;
+	@NotEmpty(message="Login obrigatório.")
 	@Column(name="LOGIN_USUARIO")
 	private String login;
+	@NotEmpty(message="Senha obrigatória.")
 	@Column(name="SENHA_USUARIO")
 	private String senha;
 	@Column(name="STATUS_USUARIO")
@@ -43,6 +47,7 @@ public class Usuario implements Serializable{
 	@ManyToOne
 	@JoinColumn(name = "ID_PERFIL_USUARIO")
 	private Perfil perfil = new Perfil();
+	@NotEmpty(message="Sobrenome obrigatório.")
 	@Column(name="SOBRENOME_USUARIO")
 	private String sobrenome;
 	@NotEmpty

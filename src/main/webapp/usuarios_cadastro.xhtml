@@ -14,19 +14,19 @@
 				                    <p:outputLabel value="Nome*"  />
 				                </p:column>
 				                <p:column>
-				                    <p:inputText required="true" validatorMessage="Nome obrigatório" value="#{usuarioMBean.usuario.nome}"  title="Nome"/>
+				                    <p:inputText  value="#{usuarioMBean.usuario.nome}"  title="Nome"/>
 				                </p:column>
 								<p:column>
 				                    <p:outputLabel value="Sobrenome*" />
 								</p:column>
 								<p:column>
-				                    <p:inputText required="true" validatorMessage="Sobre obrigatório"  value="#{usuarioMBean.usuario.sobrenome}"  title="Sobrenome"/>
+				                    <p:inputText   value="#{usuarioMBean.usuario.sobrenome}"  title="Sobrenome"/>
 								</p:column>			 
 								<p:column>
 				                   <p:outputLabel value="Email*" />
 								</p:column>
 								<p:column>
-				                    <p:inputText id="email" required="true" validatorMessage="Email obrigatório" value="#{usuarioMBean.usuario.email}">
+				                    <p:inputText id="email"  value="#{usuarioMBean.usuario.email}">
 				                    	
 				                    </p:inputText>
 								</p:column>	
@@ -35,22 +35,22 @@
 						           	<p:outputLabel value="Login*" />
 								</p:column>
 								<p:column >
-							    	<p:inputText id="loginIn" required="true" validatorMessage="Login obrigatório" value="#{usuarioMBean.usuario.login}">
-							    		<p:ajax listener="#{usuarioMBean.validarLoginCadastro()}" event="change" update="loginIn, message"/>
+							    	<p:inputText id="loginIn" value="#{usuarioMBean.usuario.login}">
+							    		<p:ajax listener="#{usuarioMBean.validarLoginCadastro()}" event="change" update=" message"/>
 							    	</p:inputText>
 								</p:column>
 								<p:column>
 					            	<p:outputLabel value="Senha*" />
 	 							</p:column>
 	 							<p:column>
-				                	<p:password  required="true" validatorMessage="Senha obrigatória" value="#{usuarioMBean.usuario.senha}" />
+				                	<p:password   value="#{usuarioMBean.usuario.senha}" />
 	 							</p:column>
 			               
 			               </p:panelGrid>
 			   </p:fieldset>
 				           <h:panelGrid  style="width:8%; margin-left:18%;" columns="2">
 				                <p:column>
-						            <p:commandButton  title="Confirmar Cadastramento" icon="fa fa-fw fa-floppy-o" action="#{usuarioMBean.salvar()}"/>
+						            <p:commandButton  title="Confirmar Cadastramento" icon="fa fa-fw fa-floppy-o" action="#{usuarioMBean.salvar()}" update="form"/>
 				            	</p:column>
 				            	 <p:column>
 						            <p:commandButton  title="Cancelar Cadastramento" icon="fa fa-fw fa-close" action="#{usuarioMBean.cancelar()}" process="@this"/>
