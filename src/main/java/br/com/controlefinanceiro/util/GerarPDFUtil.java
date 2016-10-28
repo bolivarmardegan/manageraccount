@@ -8,8 +8,6 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -179,12 +177,17 @@ public class GerarPDFUtil {
          tableuSER.addCell(pTipo);
          
          
-         LocalDate dataAtual = LocalDate.now();
+      //   LocalDate dataAtual = LocalDate.now();
+        Calendar calendar = new GregorianCalendar().getInstance();
+ 		SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy");
+ 		String dataString = s.format(calendar.getTime());
+         
+         
          BigDecimal maiorCredito = this.gerarMaiorCredito(this.financas);
          BigDecimal maiorDebito = this.gerarMaiorDebito(this.financas);
          
  		 Paragraph paragraph1 = new Paragraph(usuario.getNome()+" "+usuario.getSobrenome(),conteudoTable);
-	   	 Paragraph paragraph2 = new Paragraph(dataAtual.toString(),conteudoTable);
+	   	 Paragraph paragraph2 = new Paragraph(dataString,conteudoTable);
 	   	 Paragraph paragraph3 = new Paragraph("R$-"+maiorDebito,conteudoTable);
 	   	 Paragraph paragraph4 = new Paragraph("R$"+maiorCredito,conteudoTable);
 	   	 tableuSER.addCell(paragraph1);

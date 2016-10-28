@@ -16,7 +16,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -368,7 +367,11 @@ public class FinancasMBean extends AbstractManagedBean<Financa> implements Seria
 	    	row.getCell(7).setCellStyle(cellStyleHeader);
 	    	
 	    	HSSFRow row1 = firstSheet.createRow(8);
-	    	LocalDate dataAtual = LocalDate.now();
+	    	//LocalDate dataAtual = LocalDate.now();
+	    	Calendar calendar1 = new GregorianCalendar().getInstance();
+	  		SimpleDateFormat s1 = new SimpleDateFormat("dd/MM/yyyy");
+	  		String dataString1 = s1.format(calendar1.getTime());
+	    	
 	    	BigDecimal gerarMaiorCredito = this.gerarMaiorCredito(financas);
 	    	BigDecimal gerarMaiorDebito = this.gerarMaiorDebito(financas);
 	    	row1.createCell(4).setCellValue(this.usuSession.getUsuarioLogado().getNome()+" "+this.usuSession.getUsuarioLogado().getSobrenome());
